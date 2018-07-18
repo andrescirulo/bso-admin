@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>BSO (Banda Sonora Original)</title>
+
+<link href="styles/material.css" rel="stylesheet">
+<link href="styles/vuetify.min.css" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+
+<!-- <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script> -->
+<style type="text/css">
+	 [v-cloak] {
+	    display: none;
+	 }
+	.main-container{
+		padding: 0px !important;
+	}
+	.bar-button{
+		border-right: 1px solid #EEEEEE !important;
+	}
+	.expansion-panel__header{
+		border-bottom:1px solid #DDD; 
+	}
+	.panel-temporada-content .expansion-panel__body{
+		text-align:center;
+	}
+	.texto-capitulo{
+		max-height:150px;
+		text-overflow: ellipsis;
+	    overflow: hidden;
+	}
+	.staff-intro{
+		border-bottom:1px solid #26a69a;
+		padding-bottom:10px;
+		margin-bottom:10px;
+		margin-left:10px;
+		margin-right:10px;
+	}
+	.staff-header{
+		padding-top:10px;
+		text-align:center;
+		width: 100%;
+		font-weight: bold; 
+	}
+	.staff-texto{
+		text-align:center;
+		width: 100%;
+	}
+	.inicio-panel-derecha{
+		height: 95% !important;
+	    margin: 5px;
+/* 	    border-radius: 50px; */
+	}
+	.capitulo-panel-derecha{
+		height: 95% !important;
+	    margin: 5px;
+	}
+	.carousel-animation-out{
+	    animation-name: carousel-out;
+	    animation-duration: 1s;
+	    animation-fill-mode: forwards;
+	    animation-timing-function: ease-in-out;
+	}
+	.carousel-animation-in{
+		animation-name: carousel-in;
+	    animation-duration: 1s;
+	    animation-fill-mode: forwards;
+	    animation-timing-function: ease-in-out;
+	}
+	@keyframes carousel-out {
+    	from {height: 380px;}
+    	to {height: 100px;}
+	}
+	@keyframes carousel-in {
+    	to {height: 380px;}
+    	from {height: 100px;}
+	}
+	
+	.fade-enter {
+  		opacity: 0;
+	}
+	
+	.fade-enter-active {
+		transition: opacity 1s ease;
+	}
+	
+	.fade-leave {}
+	
+	.fade-leave-active {
+	  transition: opacity 1s ease;
+	  opacity: 0;
+	}
+	
+	.slide-leave-active,
+	.slide-enter-active {
+	  transition: 1s;
+	}
+	.slide-enter {
+	  transform: translate(100%, 0);
+	}
+	.slide-leave-to {
+	  transform: translate(-100%, 0);
+	}
+
+
+	/* Enter and leave animations can use different */
+	/* durations and timing functions.              */
+	.slide-fade-enter-active {
+	  transition: all .3s ease;
+	}
+	.slide-fade-leave-active {
+	  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+	}
+	.slide-fade-enter, .slide-fade-leave-to
+	/* .slide-fade-leave-active below version 2.1.8 */ {
+	  transform: translateX(10px);
+	  opacity: 0;
+	}
+	.main-panel{
+		background-color:#DDDDDD;
+	}
+	.autor-texto{
+		margin-bottom:20px;
+		font-weight: bold;
+	}
+	.fecha-picker input{
+		cursor: pointer;
+	}
+</style>
+
+	<base href="/bso-admin/">
+</head>
+<body onresize="updateMinHeight()">
+	<v-app id="app" app>
+		<v-content style="background-color:#666666" v-cloak>
+			<v-container class="main-container" style="background-color:#666666">
+				 <v-layout row wrap>
+			      <v-flex xs12 md10 xl8 class="mx-auto main-panel" id="main-panel" >
+			      	<v-layout row wrap>
+			      		<v-flex xs12 xl10 class="mx-auto">
+				      		<img src="imagenes/logo-bso.png" style="max-width: 100%" class="elevation-7 mx-auto" />
+					      
+							<v-tabs grow fixed-tabs router show-arrows dark color="cyan"  slider-color="yellow">
+								<v-tab to="/" class="bar-button"><v-icon>home</v-icon></v-tab>
+								<v-tab to="/temporadas" class="bar-button">Temporadas</v-tab>
+								<v-tab to="/bso-escribe" class="bar-button">¡BSO escribe!</v-tab>
+								<v-tab to="/bso-escucha" class="bar-button">¡BSO escucha!</v-tab>
+								<v-tab to="/quienes-somos" class="bar-button">Quienes Somos</v-tab>
+								<v-tab to="/cuadernos">¡Cuadernos!</v-tab>
+							</v-tabs>
+							<transition name="fade" mode="out-in">
+								<router-view></router-view>
+							</transition>
+							<v-btn color="teal" dark bottom right fab fixed onclick="scrollToTop()">
+				              <v-icon>expand_less</v-icon>
+				            </v-btn>
+						</v-flex>
+						</v-layout>
+			      </v-flex>
+			      </v-layout>
+			</v-container>
+		</v-content>
+	</v-app>
+
+
+		
+
+		<!-- development version, includes helpful console warnings-->
+		<script src="scripts/vue.js"></script> 
+		<!-- production version, optimized for size and speed 
+		<script src="scripts/vue.min.js"></script> -->
+		
+		<script src="scripts/vue-router.js"></script>
+		<script src="scripts/vuetify.js"></script>
+		<script src="scripts/vue-resource.js"></script>
+		<script src="scripts/vue2-editor.js"></script>
+		
+		<script type="text/javascript" src="templates/inicio.js"></script>
+		<script type="text/javascript" src="templates/bso-escribe.js"></script>
+		<script type="text/javascript" src="templates/texto.js"></script>
+		<script type="text/javascript" src="templates/bso-escucha.js"></script>
+		<script type="text/javascript" src="templates/cuadernos.js"></script>
+		<script type="text/javascript" src="templates/capitulo.js"></script>
+		<script type="text/javascript" src="templates/capitulo-editor.js"></script>
+		<script type="text/javascript" src="templates/quienes-somos.js"></script>
+		<script type="text/javascript" src="templates/temporadas.js"></script>
+		
+		<script type="text/javascript" src="index.js"></script>
+</body>
+</html>
