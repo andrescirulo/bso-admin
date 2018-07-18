@@ -28,6 +28,7 @@ const routes = [
   { path: '/capitulo/:id', component: Capitulo },
   { path: '/texto/:id', component: Texto },
   { path: '/capitulo-editor/:id', component: CapituloEditor },
+  { path: '/texto-editor/:id', component: TextoEditor },
   
 ]
 

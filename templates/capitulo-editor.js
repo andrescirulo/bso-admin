@@ -77,6 +77,7 @@ const CapituloEditor = { template: '<div>'+
 			Vue.http.post("api/capitulos.php",this.capitulo).then(result => {
 					result.json().then(capitulo =>{
 						this.capitulo = capitulo;
+						router.push({ path: '/temporadas' });
 					});
 			}, error => {
 					console.error(error);

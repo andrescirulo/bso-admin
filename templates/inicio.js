@@ -21,14 +21,14 @@ const Inicio = { template: '<div>'+
 			'</v-card-actions>' + 
 		  '</v-flex>' + 
 		'</v-layout>' + 
-      '</v-container>' + 
+		'</v-container>' + 
 	  '</v-card>' +
 	  '</v-flex>' + 
 	  '<v-flex class="hidden-sm-and-down" md3>' +
-	  	'<v-card class="inicio-panel-derecha" color="teal">' +
+		'<v-card class="inicio-panel-derecha" color="teal">' +
 		'</v-card>' + 
 	  '</v-flex>' +
-	'</v-layout><vue-editor v-model="content"></vue-editor>' +
+	'</v-layout>' + 
 	'</div>' ,
 	data () {
 	      return { capitulos:[],basepath:'../bso-radio/'}

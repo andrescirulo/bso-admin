@@ -20,9 +20,16 @@ const BsoEscribe = { template: '<div>'+
 							  '<div class="headline text--lighten-1 teal--text">{{tex.titulo}}</div>' + 
 							  '<div class="text--lighten-1 teal--text" >{{tex.subtitulo}}</div>' + 
 							  '<div class="texto-capitulo" v-html="tex.resenia"></div>' + 
+							  '<div class="texto-autor">Por {{tex.autor}}</div>' + 
 							'</div>' + 
 							'<v-card-actions>' + 
-							'<v-btn color="cyan" dark :href="\'#/texto/\' + tex.id">Leer Más</v-btn>' + 
+								'<v-btn color="cyan" dark :href="\'#/texto/\' + tex.id">Leer Más</v-btn>' + 
+								'<v-btn icon ripple color="blue" dark :href="\'#/texto-editor/\' + tex.id">'+
+											'<v-icon color="white">edit</v-icon>'+
+								'</v-btn>'+
+								'<v-btn icon ripple color="red" dark>'+
+										'<v-icon color="white">delete</v-icon>'+
+								'</v-btn>'+
 							'</v-card-actions>' + 
 						  '</v-flex>' + 
 						'</v-layout>' + 
