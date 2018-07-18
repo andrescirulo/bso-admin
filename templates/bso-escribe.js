@@ -9,6 +9,9 @@ const BsoEscribe = { template: '<div>'+
 					 '<div v-if="textos.length==0" style="width:100%;text-align:center">'+
 					 '<v-progress-circular mx-auto :size="70" :width="7" indeterminate color="green" ></v-progress-circular>'+
 					 '</div>'+
+					 '<v-btn ripple color="cyan" dark :href="\'#/texto-editor/new\'">'+
+						'<v-icon color="white">add</v-icon>Agregar Texto'+
+					'</v-btn>'+ 
 					 '<v-card v-if="textos.length>0" v-for="(tex,i) in textos" :key="i" style="margin-bottom:10px">' + 
 						'<v-container fluid grid-list-lg>' + 
 						'<v-layout row wrap>' + 
