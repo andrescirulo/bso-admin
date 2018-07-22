@@ -9,6 +9,9 @@ const BsoEscucha = { template: '<div>'+
 	 '<div v-if="entrevistas.length==0" style="width:100%;text-align:center">'+
 	 '<v-progress-circular mx-auto :size="70" :width="7" indeterminate color="green" ></v-progress-circular>'+
 	 '</div>'+
+	 '<v-btn ripple color="cyan" dark :href="\'#/entrevista-editor/new\'">'+
+	 	'<v-icon color="white">add</v-icon>Agregar Entrevista'+
+	 '</v-btn>'+ 
 	 '<v-card v-if="entrevistas.length>0" v-for="(entrev,i) in entrevistas" :key="i" style="margin-bottom:10px">' + 
 		'<v-container fluid grid-list-lg>' + 
 		'<v-layout row wrap>' + 
@@ -21,7 +24,13 @@ const BsoEscucha = { template: '<div>'+
 			  '<div class="texto-capitulo" v-html="entrev.texto"></div>' + 
 			'</div>' + 
 			'<v-card-actions>' + 
-			'<v-btn color="cyan" dark :href="entrev.link">Escuchar</v-btn>' + 
+				'<v-btn color="cyan" dark :href="entrev.link">Escuchar</v-btn>' +
+				'<v-btn icon ripple color="blue" dark :href="\'#/entrevista-editor/\' + entrev.id">'+
+					'<v-icon color="white">edit</v-icon>'+
+				'</v-btn>'+
+				'<v-btn icon ripple color="red" dark>'+
+					'<v-icon color="white">delete</v-icon>'+
+				'</v-btn>'+ 
 			'</v-card-actions>' + 
 		  '</v-flex>' + 
 		'</v-layout>' + 
