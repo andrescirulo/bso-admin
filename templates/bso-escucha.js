@@ -21,7 +21,8 @@ const BsoEscucha = { template: '<div>'+
 		  '<v-flex xs12 sm7>' + 
 			'<div>' + 
 			  '<div class="headline text--lighten-1 teal--text">{{entrev.titulo}}</div>' + 
-			  '<div class="texto-capitulo" v-html="entrev.texto"></div>' + 
+				'<div class="entrevista-texto" v-html="entrev.texto"></div>' +
+				'<div class="entrevista-autor">Por {{entrev.autor}}</div>' +  
 			'</div>' + 
 			'<v-card-actions>' + 
 				'<v-btn color="cyan" dark :href="entrev.link">Escuchar</v-btn>' +

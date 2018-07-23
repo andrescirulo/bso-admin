@@ -8,5 +8,6 @@ class Entrevista
     public $imagen;
     public $link;
     public $publico;
+    public $autor;
 }
 

@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["e"])){
-        $query = "SELECT entr_id, entr_titulo, entr_fecha,entr_texto,entr_link, IFNULL(entr_imagen,'default_entrevista.jpg') entr_imagen,entr_publico FROM entrevistas WHERE entr_id=?";
+        $query = "SELECT entr_id, entr_titulo, entr_fecha,entr_texto,entr_link,entr_autor, IFNULL(entr_imagen,'default_entrevista.jpg') entr_imagen,entr_publico FROM entrevistas WHERE entr_id=?";
         
         $st = $dbh->prepare($query);
         $st->bindParam(1,$_GET["e"]);
@@ -20,13 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $entrevista->texto=$resData["entr_texto"];
         $entrevista->link=$resData["entr_link"];
         $entrevista->publico=$resData["entr_publico"];
+        $entrevista->autor=$resData["entr_autor"];
 
         echo json_encode($entrevista);
     }
     else{
         $entrevistas=array();
         
-        $query = "SELECT entr_id, entr_titulo, entr_fecha,entr_texto,entr_link, IFNULL(entr_imagen,'default_entrevista.jpg') entr_imagen,entr_publico FROM entrevistas ORDER BY entr_fecha DESC";
+        $query = "SELECT entr_id, entr_titulo, entr_fecha,entr_texto,entr_link,entr_autor, IFNULL(entr_imagen,'default_entrevista.jpg') entr_imagen,entr_publico FROM entrevistas ORDER BY entr_fecha DESC";
         
         $st = $dbh->prepare($query);
         $st->execute();
@@ -39,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $entrevista->texto=$resData["entr_texto"];
             $entrevista->link=$resData["entr_link"];
             $entrevista->publico=$resData["entr_publico"];
+            $entrevista->autor=$resData["entr_autor"];
             $entrevistas[]=$entrevista;
         }
         
@@ -65,7 +67,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else{
         $entrevista=$request;
         if ($entrevista->editando){
-            $update = "UPDATE entrevistas SET entr_titulo=?, entr_texto=?, entr_fecha=?, entr_link=?, entr_imagen=? WHERE entr_id=?";
+            $update = "UPDATE entrevistas SET entr_titulo=?, entr_texto=?, entr_fecha=?, entr_link=?, entr_imagen=?,entr_autor=? WHERE entr_id=?";
             
             $st = $dbh->prepare($update);
             $st->bindParam(1,$entrevista->titulo);
@@ -73,11 +75,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(3,$entrevista->fecha);
             $st->bindParam(4,$entrevista->link);
             $st->bindParam(5,$entrevista->imagen);
-            $st->bindParam(6,$entrevista->id);
+            $st->bindParam(6,$entrevista->autor);
+            $st->bindParam(7,$entrevista->id);
             $st->execute();
         }
         else{
-            $insert = "INSERT INTO entrevistas (entr_titulo, entr_texto, entr_fecha, entr_link, entr_imagen)";
+            $insert = "INSERT INTO entrevistas (entr_titulo, entr_texto, entr_fecha, entr_link, entr_imagen,entr_autor)";
             $insert = $insert . " VALUES(?, ?, ?, ?, ?)";
             
             $st = $dbh->prepare($insert);
@@ -86,6 +89,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(3,$entrevista->fecha);
             $st->bindParam(4,$entrevista->link);
             $st->bindParam(5,$entrevista->imagen);
+            $st->bindParam(6,$entrevista->autor);
             $st->execute();
         }
         echo json_encode($entrevista);

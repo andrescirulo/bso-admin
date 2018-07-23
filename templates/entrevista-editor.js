@@ -11,6 +11,7 @@ const EntrevistaEditor = { template: '<div>'+
 				'<h2 v-if="entrevista.editando">Editando entrevista</h2>' + 
 				'<v-form ref="form" lazy-validation>' + 
 					'<v-text-field v-model="entrevista.titulo" :counter="50" label="Título" required></v-text-field>' +
+					'<v-text-field v-model="entrevista.autor" :counter="100" label="Autor" required></v-text-field>' +
 					'<v-text-field class="textarea-label" v-model="entrevista.texto" multi-line :counter="1000" label="Texto" required></v-text-field>' +
 					'<v-dialog ref="dialog" v-model="modal" :return-value.sync="entrevista.fecha" persistent lazy full-width width="290px" >' +
 						'<v-text-field class="fecha-picker" slot="activator" v-model="entrevista.fecha" label="Fecha" readonly></v-text-field>' +
