@@ -3,6 +3,8 @@ require_once 'domain/texto.php';
 require_once 'connect.php';
 
 header('Content-Type: application/json');
+$BSO_RADIO_CLI_DIR="../bso-radio/";
+$BSO_RADIO_DIR="../../bso-radio/";
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["t"])){
@@ -23,6 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $texto->autor=$resData["texto_autor"];
         $texto->texto=$resData["texto_contenido"];
         $texto->publico=$resData["texto_publico"];
+        
+        //HAGO ESTO PARA QUE EL ADMIN PUEDA VER LAS IMAGENES
+        $texto->texto = str_replace('img src="','img src="' . $BSO_RADIO_CLI_DIR,$texto->texto);
         
         echo json_encode($texto);
     }
@@ -68,6 +73,42 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else{
         $texto=$request;
+        
+        //DESHAGO EL FIX DEL PATH DE LAS IMAGENES PARA QUE SE GUARDE BIEN
+        $texto->texto = str_replace('img src="' . $BSO_RADIO_CLI_DIR,'img src="',$texto->texto);
+        
+        //PROCESO LAS IMAGENES QUE SE PUEDAN HABER AGREGADO
+        while ($pos=strpos($texto->texto,'<img src="data')){
+            //error_log("\n\nENCONTRADO " . $pos,3,'errors.log');
+            $pos = $pos+(strlen('<img src="'));
+            $data64 = substr($texto->texto,$pos,strpos($texto->texto , '"' , $pos+1)-$pos);
+            $data = $data64;
+            //error_log("\n\nDATA: " . $data,3,'errors.log');
+            if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
+                $data = substr($data, strpos($data, ',') + 1);
+                $type = strtolower($type[1]); // jpg, png, gif
+                
+                if (!in_array($type, [ 'jpg', 'jpeg', 'gif', 'png' ])) {
+                    error_log("\n\nPUM 3 ",3,'errors.log');
+                }
+                
+                $data = base64_decode($data);
+                
+                if ($data === false) {
+                    error_log("\n\nPUM 2 ",3,'errors.log');
+                }
+            } else {
+                error_log("\n\nPUM 1 ",3,'errors.log');
+            }
+            
+            $randName = uniqid("txt-") . "." . $type;
+            file_put_contents($BSO_RADIO_DIR . "imagenes/textos/" . $randName, $data);
+            // VER DE REPROCESAR LA IMAGEN PARA QUE TENGA UN TAMAÑO MAXIMO
+            $texto->texto=str_replace($data64 . '"',"imagenes/textos/" . $randName . '" style="width:100%"',$texto->texto);
+        }
+        
+        
+        
         if ($texto->editando){
             $update = "UPDATE textos SET texto_titulo=?, texto_subtitulo=?, texto_fecha=?, texto_contenido=?, texto_resenia=?, texto_imagen=?, texto_autor=? WHERE texto_id=?";
             $st = $dbh->prepare($update);
@@ -94,6 +135,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(6,$texto->imagen);
             $st->bindParam(7,$texto->autor);
             $st->execute();
+            
         }
         echo json_encode($texto);
     }
