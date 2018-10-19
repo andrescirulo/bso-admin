@@ -1,5 +1,12 @@
 const EntrevistaEditor = { template: '<div>'+
 		'<v-layout row>' + 
+			'<v-flex xs12>' +
+				'<v-alert v-for="(err,e) in errores" :key="e" :value="true" type="error" dismissible>' +
+				'{{err}}' + 
+				'</v-alert>'+
+			'</v-flex>' +
+		'</v-layout>' + 
+		'<v-layout row>' + 
 		'<v-flex xs12>' +
 		'<div v-if="entrevista==null" style="width:100%;text-align:center">'+
 			'<v-progress-circular mx-auto indeterminate ></v-progress-circular>'+
@@ -49,7 +56,7 @@ const EntrevistaEditor = { template: '<div>'+
 	'</v-layout>' +
 	'</div>' ,
 	data () {
-	      return { entrevista:{},modal: false}
+	      return { entrevista:{},modal: false,errores:[]}
 	},
 	mounted() {
 			const idEntrevista=this.$route.params.id;
@@ -71,7 +78,30 @@ const EntrevistaEditor = { template: '<div>'+
 			}
 	},
 	methods: {
+		validar(){
+			 this.errores=[];
+			 if (this.entrevista.titulo==null){
+				 this.errores.push('El titulo de la entrevista es obligatorio');
+			 }
+			 if (this.entrevista.autor==null){
+				 this.errores.push('El autor de la entrevista es obligatorio');
+			 }
+			 if (this.entrevista.fecha==null){
+				 this.errores.push('La fecha de la entrevista es obligatoria');
+			 }
+			 if (this.entrevista.texto==null){
+				 this.errores.push('El texto de la entrevista es obligatorio');
+			 }
+			 if (this.entrevista.link==null){
+				 this.errores.push('El link de la entrevista es obligatorio');
+			 }
+			 return this.errores.length==0;
+		 },
 		 onGuardar(){
+			if (!this.validar()){
+				scrollToTop();
+				return;
+			}
 			Vue.http.post("api/entrevistas.php",this.entrevista).then(result => {
 					result.json().then(entrevista =>{
 						this.entrevista = entrevista;

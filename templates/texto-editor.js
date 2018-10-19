@@ -1,5 +1,12 @@
 const TextoEditor = { template: '<div>'+
 		'<v-layout row>' + 
+			'<v-flex xs12>' +
+				'<v-alert v-for="(err,e) in errores" :key="e" :value="true" type="error" dismissible>' +
+				'{{err}}' + 
+				'</v-alert>'+
+			'</v-flex>' +
+		'</v-layout>' + 
+		'<v-layout row>' + 
 		'<v-flex xs12>' +
 		'<div v-if="texto==null" style="width:100%;text-align:center">'+
 			'<v-progress-circular mx-auto indeterminate ></v-progress-circular>'+
@@ -50,7 +57,7 @@ const TextoEditor = { template: '<div>'+
 	'</v-layout>' +
 	'</div>' ,
 	data () {
-	      return { texto:{},modal: false}
+	      return { texto:{},modal: false,errores:[]}
 	},
 	mounted() {
 			const idTexto=this.$route.params.id;
@@ -72,7 +79,33 @@ const TextoEditor = { template: '<div>'+
 			}
 	},
 	methods: {
+		validar(){
+			 this.errores=[];
+			 if (this.texto.titulo==null){
+				 this.errores.push('El titulo del texto es obligatorio');
+			 }
+			 if (this.texto.subtitulo==null){
+				 this.errores.push('El subtitulo del texto es obligatorio');
+			 }
+			 if (this.texto.autor==null){
+				 this.errores.push('El autor del texto es obligatorio');
+			 }
+			 if (this.texto.resenia==null){
+				 this.errores.push('La reseña del texto es obligatoria');
+			 }
+			 if (this.texto.fecha==null){
+				 this.errores.push('La fecha del texto es obligatoria');
+			 }
+			 if (this.texto.texto==null){
+				 this.errores.push('El texto del texto es obligatorio');
+			 }
+			 return this.errores.length==0;
+		 },
 		 onGuardar(){
+			if (!this.validar()){
+				scrollToTop();
+				return;
+			}
 			Vue.http.post("api/textos.php",this.texto).then(result => {
 					result.json().then(texto =>{
 						this.texto = texto;

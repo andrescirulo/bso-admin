@@ -1,5 +1,12 @@
 const CapituloEditor = { template: '<div>'+
 		'<v-layout row>' + 
+			'<v-flex xs12>' +
+				'<v-alert v-for="(err,e) in errores" :key="e" :value="true" type="error" dismissible>' +
+				'{{err}}' + 
+				'</v-alert>'+
+			'</v-flex>' +
+		'</v-layout>' + 
+		'<v-layout row>' + 
 		'<v-flex xs12>' +
 		'<div v-if="capitulo==null" style="width:100%;text-align:center">'+
 			'<v-progress-circular mx-auto indeterminate ></v-progress-circular>'+
@@ -51,7 +58,7 @@ const CapituloEditor = { template: '<div>'+
 	'</v-layout>' +
 	'</div>' ,
 	data () {
-	      return { capitulo:{},temporadas:['7','6','5','4','3','2','1'],modal: false}
+	      return { capitulo:{},temporadas:['7','6','5','4','3','2','1'],modal: false,errores:[]}
 	},
 	mounted() {
 			const idCapitulo=this.$route.params.id;
@@ -73,7 +80,33 @@ const CapituloEditor = { template: '<div>'+
 			}
 	},
 	methods: {
+		 validar(){
+			 this.errores=[];
+			 if (this.capitulo.numero==null){
+				 this.errores.push('El número del capitulo es obligatorio');
+			 }
+			 if (this.capitulo.temporada==null){
+				 this.errores.push('La temporada del capitulo es obligatoria');
+			 }
+			 if (this.capitulo.nombre==null){
+				 this.errores.push('El nombre del capitulo es obligatorio');
+			 }
+			 if (this.capitulo.texto==null){
+				 this.errores.push('El texto del capitulo es obligatorio');
+			 }
+			 if (this.capitulo.linkDescargar==null){
+				 this.errores.push('El link para descargar es obligatorio');
+			 }
+			 if (this.capitulo.linkEscuchar==null){
+				 this.errores.push('El link para escuchar es obligatorio');
+			 }
+			 return this.errores.length==0;
+		 },
 		 onGuardar(){
+			if (!this.validar()){
+				scrollToTop();
+				return;
+			}
 			Vue.http.post("api/capitulos.php",this.capitulo).then(result => {
 					result.json().then(capitulo =>{
 						this.capitulo = capitulo;

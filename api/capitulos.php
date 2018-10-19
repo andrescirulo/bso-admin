@@ -129,7 +129,14 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(6,$capitulo->texto);
             $st->bindParam(7,$capitulo->linkEscuchar);
             $st->bindParam(8,$capitulo->imagen);
-            $st->execute();
+            $ok=$st->execute();
+            if ($ok === true){
+                error_log("\nOK capitulo",3,'errors.log');
+            }
+            else{
+                error_log("\nMAL capitulo",3,'errors.log');
+                error_log("\n" . print_r($st->errorInfo(),true),3,'errors.log');
+            }
         }
         echo json_encode($capitulo);
     }
