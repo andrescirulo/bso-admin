@@ -9,31 +9,28 @@ const QuienesSomos = { template: '<div><v-card style="margin-bottom:10px">'+
 					     '<h2 class="text--lighten-1 teal--text" style="text-align:center;">STAFF</h2>' +
 					     '<div class="staff-header">CONDUCCIÓN</div>'+
 					     '<div class="staff-texto">Diego Cirulo</div>'+
-					     '<div class="staff-header">COLUMNISTAS</div>'+
 					     '<div class="staff-texto">Fabio Villalba</div>'+
-					     '<div class="staff-texto">Laura Marajofsky</div>'+
 					     '<div class="staff-header">OPERADOR</div>'+
 					     '<div class="staff-texto">Juan Sixto</div>'+
 					     '<div class="staff-header">LOCUCIÓN</div>'+
-					     '<div class="staff-texto">Camila Segovia</div>'+
-					     '<div class="staff-texto">Daniela Jorquera</div>'+
-					     '<div class="staff-texto">Juan Sixto</div>'+
-					     '<div class="staff-header">TEXTOS Y ENTREVISTAS</div>'+
-					     '<div class="staff-texto">Mariano Morita</div>'+
-					     '<div class="staff-texto">Fabio Villalba</div>'+
-					     '<div class="staff-texto">Diego Cirulo</div>'+
-					     '<div class="staff-texto">Laura Marajofsky</div>'+
+					     '<div class="staff-texto">Juan Sixto (2012-2016)</div>'+
+					     '<div class="staff-texto">Camila Segovia (2016)</div>'+
+					     '<div class="staff-texto">Daniela Jorquera (2016 - presente)</div>'+
+					     '<div class="staff-header">COLUMNAS, TEXTOS Y ENTREVISTAS</div>'+
 					     '<div class="staff-texto">Andrés Brandariz</div>'+
-					     '<div class="staff-texto">Sebastián Gentile</div>'+
-					     '<div class="staff-texto">Belén Saitúa</div>'+
+					     '<div class="staff-texto">Diego Cirulo</div>'+
 					     '<div class="staff-texto">Luciana Eyras</div>'+
+					     '<div class="staff-texto">Sebastián Gentile</div>'+
+					     '<div class="staff-texto">Laura Marajofsky</div>'+
+					     '<div class="staff-texto">Mariano Morita</div>'+
 					     '<div class="staff-texto">Eugenia Rimoldi</div>'+
+					     '<div class="staff-texto">Belén Saitúa</div>'+
+					     '<div class="staff-texto">Fabio Villalba</div>'+
 					     '<div class="staff-header">ILUSTRACIONES</div>'+
 					     '<div class="staff-texto">Nicolas Aponte A. Gutter</div>'+
 					     '<div class="staff-header">PRODUCCIÓN GENERAL</div>'+
 					     '<div class="staff-texto">Diego Cirulo</div>'+
 					     '<div class="staff-texto">Fabio Villalba</div>'+
-					     '<div class="staff-texto">Laura Marajofsky</div>'+
 					     '</v-card-text>' +
 					     '</v-card>'+
 					     '<v-card>'+
@@ -46,7 +43,9 @@ const QuienesSomos = { template: '<div><v-card style="margin-bottom:10px">'+
 					     '<div class="staff-texto">Leandro Corengia</div>'+
 					     '<div class="staff-texto">Pablo De Vita</div>'+
 					     '<div class="staff-texto">Luciana Eyras</div>'+
+					     '<div class="staff-texto">Ángel Faretta</div>'+
 					     '<div class="staff-texto">Mariano Morita</div>'+
+					     '<div class="staff-texto">Francisco Noriega</div>'+
 					     '<div class="staff-texto">Guido Rosano</div>'+
 					     '<div class="staff-texto">Salvador Savarese</div>'+
 					     '<div class="staff-texto">Adrián Szmukler</div>'+

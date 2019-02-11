@@ -9,5 +9,6 @@ class Entrevista
     public $link;
     public $publico;
     public $autor;
+    public $ivoox;
 }
 

@@ -29,7 +29,8 @@ const EntrevistaEditor = { template: '<div>'+
 						'</v-date-picker>' +
 					'</v-dialog>' +
 					'<v-text-field v-model="entrevista.link" :counter="100" label="Link para Escuchar" required></v-text-field>' +
-					'<v-text-field type="file" label="Imagen" required></v-text-field>' +
+//					'<v-text-field type="file" label="Imagen" required></v-text-field>' +
+					'<image-uploader v-bind:idElem="entrevista.id" v-bind:tipo="\'ENTREVISTA\'" v-bind:path="\'entrevistas\'" v-bind:imagenUrl="entrevista.imagen"></image-uploader>' +
 				'</v-form>' +
 				'<v-card-actions style="justify-content: flex-end;">' +
 					'<v-btn color="red" dark >' +

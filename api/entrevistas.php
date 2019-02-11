@@ -3,6 +3,12 @@ require_once 'domain/entrevista.php';
 require_once 'connect.php';
 
 header('Content-Type: application/json');
+session_save_path('sessions');
+session_start();
+$publico=" AND entr_publico=1";
+if (isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
+    $publico="";
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["e"])){
@@ -21,14 +27,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $entrevista->link=$resData["entr_link"];
         $entrevista->publico=$resData["entr_publico"];
         $entrevista->autor=$resData["entr_autor"];
-
+        
         echo json_encode($entrevista);
     }
     else{
+        $LIMITE = 10;
+        $pagina=0;
+        if (isset($_GET["p"])){
+            $pagina=($_GET["p"]-1);
+        }
+        $offset = $LIMITE*$pagina;
+        
+        $info= array();
+        
+        if (!isset($_GET["tp"]) || $_GET["tp"]==0){
+            $queryCount = "SELECT COUNT(*) cant FROM entrevistas WHERE 1=1" . $publico;
+            $st = $dbh->prepare($queryCount);
+            $st->execute();
+            $resData = $st->fetch();
+            $info['paginas']=ceil($resData["cant"]/($LIMITE*1.0));
+        }
+        
         $entrevistas=array();
-        
-        $query = "SELECT entr_id, entr_titulo, entr_fecha,entr_texto,entr_link,entr_autor, IFNULL(entr_imagen,'default_entrevista.jpg') entr_imagen,entr_publico FROM entrevistas ORDER BY entr_fecha DESC";
-        
+        $query = "SELECT entr_id, entr_titulo, entr_fecha,entr_texto,entr_link,entr_autor, IFNULL(entr_imagen,'default_entrevista.jpg') entr_imagen,entr_ivoox,entr_publico";
+        $query .= " FROM entrevistas WHERE 1=1" . $publico . " ORDER BY entr_fecha DESC LIMIT 10 OFFSET " . $offset;
+                
         $st = $dbh->prepare($query);
         $st->execute();
         while ($resData = $st->fetch()) {
@@ -41,10 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $entrevista->link=$resData["entr_link"];
             $entrevista->publico=$resData["entr_publico"];
             $entrevista->autor=$resData["entr_autor"];
+            $entrevista->ivoox=$resData["entr_ivoox"];
             $entrevistas[]=$entrevista;
         }
         
-        echo json_encode($entrevistas);
+        $info['entrevistas']=$entrevistas;
+        echo json_encode($info);
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -81,7 +106,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         else{
             $insert = "INSERT INTO entrevistas (entr_titulo, entr_texto, entr_fecha, entr_link, entr_imagen,entr_autor)";
-            $insert = $insert . " VALUES(?, ?, ?, ?, ?)";
+            $insert = $insert . " VALUES(?, ?, ?, ?, ?,?)";
             
             $st = $dbh->prepare($insert);
             $st->bindParam(1,$entrevista->titulo);

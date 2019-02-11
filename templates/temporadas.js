@@ -5,18 +5,18 @@ const Temporadas = { template: '<div style="text-align:center">' +
 		'</v-btn>'+ 
 		'<v-expansion-panel v-if="temporadas.length>0" v-for="(temp,t) in temporadas" :key="t" style="margin-bottom:10px;">' + 
 			'<v-expansion-panel-content @input="onOpenOrClose(temp)" class="panel-temporada-content">'+
-			'<div slot="header" inset class="headline text--lighten-1 teal--text" style="padding-left:5px;">Temporada {{temp.numero}}</div>'+
+			'<div slot="header" inset class="headline text--lighten-1 teal--text" style="padding-left:5px;">{{temp.descripcion}} ({{temp.anio}})</div>'+
 			'<v-progress-circular mx-auto :size="70" :width="7" indeterminate color="green" v-if="temp.capitulos==null"></v-progress-circular>'+
-			'<v-list v-if="temp.capitulos!=null"><v-list-tile v-for="(capitulo,c) in temp.capitulos" :key="c" avatar @click="">'+
+			'<v-list v-if="temp.capitulos!=null"><v-list-tile v-for="(capitulo,c) in temp.capitulos" :key="c" avatar @click="irACapitulo(capitulo)">'+
 				'<v-list-tile-content style="padding-left:25px">'+
 				  '<v-list-tile-title>{{capitulo.numero}} - {{ capitulo.nombre }}</v-list-tile-title>'+
 				  '<v-list-tile-sub-title>{{ capitulo.fecha }}</v-list-tile-sub-title>'+
 				'</v-list-tile-content>'+
 				'<v-list-tile-action>'+
-				  '<v-btn class="hidden-xs-only" ripple color="cyan" dark :href="capitulo.link">'+
+				  '<v-btn v-on:click.stop class="hidden-xs-only" ripple color="cyan" dark :href="capitulo.linkDescargar" target="_blank">'+
 					'Descargar'+
 				  '</v-btn>'+
-				  '<v-btn icon class="hidden-sm-and-up" ripple color="cyan" dark :href="capitulo.link">'+
+				  '<v-btn v-on:click.stop icon class="hidden-sm-and-up" ripple color="cyan" dark :href="capitulo.link">'+
 				  	  '<v-icon color="white">file_download</v-icon>'+
 				  '</v-btn>'+
 				'</v-list-tile-action>'+
@@ -38,7 +38,19 @@ const Temporadas = { template: '<div style="text-align:center">' +
 	 data () {
 		return { temporadas:[]}
 	 },
+	 created() {
+		 Vue.http.get("api/temporadas.php").then(result => {
+			 result.json().then(elem =>{
+				 this.temporadas = elem;
+			 });
+		 }, error => {
+			 console.error(error);
+		 });
+	 },
 	 methods: {
+		 irACapitulo:function(capitulo){
+			this.$router.push('/capitulo/' + capitulo.numero) ;
+		 },
 		 onOpenOrClose(temporada){
 			 if (temporada.capitulos!=null){return;}
 			 Vue.http.get("api/temporadas.php?t=" + temporada.numero).then(result => {

@@ -17,6 +17,7 @@ const TextoEditor = { template: '<div>'+
 				'<h2 v-if="!texto.editando">Nuevo Texto</h2>' + 
 				'<h2 v-if="texto.editando">Editando texto</h2>' + 
 				'<v-form ref="form" lazy-validation>' + 
+					'<v-text-field v-model="texto.seccion" :counter="100" label="Sección" ></v-text-field>' +
 					'<v-text-field v-model="texto.titulo" :counter="100" label="Título" required></v-text-field>' +
 					'<v-text-field v-model="texto.subtitulo" :counter="150" label="Subtítulo" required></v-text-field>' +
 					'<v-text-field v-model="texto.autor" :counter="50" label="Autor" required></v-text-field>' +
@@ -30,7 +31,16 @@ const TextoEditor = { template: '<div>'+
 						'</v-date-picker>' +
 					'</v-dialog>' +
 					'<vue-editor v-model="texto.texto"></vue-editor>' + 
-					'<v-text-field type="file" label="Imagen" required></v-text-field>' +
+					'<v-layout row>' +
+						'<v-flex xs6>' +
+							'<div style="margin-top:25px" class="headline">Imagen Reseña</div>' +
+							'<image-uploader v-bind:idElem="texto.id" v-bind:tipo="\'TEXTO_RESENIA\'" v-bind:path="\'textos\'" v-bind:imagenUrl="texto.imagenResenia"></image-uploader>' +
+						'</v-flex>' +
+						'<v-flex xs6>' +
+							'<div style="margin-top:25px" class="headline">Imagen Superior</div>' +
+							'<image-uploader v-bind:idElem="texto.id" v-bind:tipo="\'TEXTO_PRINCIPAL\'" v-bind:path="\'textos\'" v-bind:imagenUrl="texto.imagen"></image-uploader>' +
+						'</v-flex>' +
+					'</v-layout>' +
 				'</v-form>' +
 				'<v-card-actions style="justify-content: flex-end;">' +
 					'<v-btn color="red" dark >' +
@@ -109,7 +119,7 @@ const TextoEditor = { template: '<div>'+
 			Vue.http.post("api/textos.php",this.texto).then(result => {
 					result.json().then(texto =>{
 						this.texto = texto;
-						router.push({ path: '/bso-escribe' });
+						router.push({ path: '/bso-escribe/1' });
 					});
 			}, error => {
 					console.error(error);

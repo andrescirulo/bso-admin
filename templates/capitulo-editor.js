@@ -20,6 +20,7 @@ const CapituloEditor = { template: '<div>'+
 					'<v-text-field v-model="capitulo.numero" type="number" label="Número" required></v-text-field>' +
 					'<v-select :items="temporadas" v-model="capitulo.temporada" label="Temporada" required></v-select>' + 
 					'<v-text-field v-model="capitulo.nombre" :counter="50" label="Nombre" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.titulo" :counter="50" label="Titulo" required></v-text-field>' +
 					'<v-text-field class="textarea-label" v-model="capitulo.texto" multi-line :counter="1000" label="Texto" required></v-text-field>' +
 					'<v-dialog ref="dialog" v-model="modal" :return-value.sync="capitulo.fecha" persistent lazy full-width width="290px" >' +
 						'<v-text-field class="fecha-picker" slot="activator" v-model="capitulo.fecha" label="Fecha" readonly></v-text-field>' +
@@ -30,8 +31,9 @@ const CapituloEditor = { template: '<div>'+
 						'</v-date-picker>' +
 					'</v-dialog>' +
 					'<v-text-field v-model="capitulo.linkDescargar" :counter="100" label="Link para Descargar" required></v-text-field>' +
-					'<v-text-field v-model="capitulo.linkEscuchar" :counter="100" label="Link para Escuchar" required></v-text-field>' +
-					'<v-text-field type="file" label="Imagen" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.linkIvoox" :counter="100" label="Link de Ivoox" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.linkMixcloud" :counter="100" label="Link de Mixcloud" required></v-text-field>' +
+					'<image-uploader v-bind:idElem="capitulo.numero" v-bind:tipo="\'CAPITULO\'" v-bind:path="\'capitulos\'" v-bind:imagenUrl="capitulo.imagen"></image-uploader>' +
 				'</v-form>' +
 				'<v-card-actions style="justify-content: flex-end;">' +
 					'<v-btn color="red" dark >' +
@@ -96,9 +98,6 @@ const CapituloEditor = { template: '<div>'+
 			 }
 			 if (this.capitulo.linkDescargar==null){
 				 this.errores.push('El link para descargar es obligatorio');
-			 }
-			 if (this.capitulo.linkEscuchar==null){
-				 this.errores.push('El link para escuchar es obligatorio');
 			 }
 			 return this.errores.length==0;
 		 },

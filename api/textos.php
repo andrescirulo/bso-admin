@@ -5,11 +5,17 @@ require_once 'connect.php';
 header('Content-Type: application/json');
 $BSO_RADIO_CLI_DIR="../bso-radio/";
 $BSO_RADIO_DIR="../../bso-radio/";
+session_save_path('sessions');
+session_start();
+$publico=" AND texto_publico=1";
+if (isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
+    $publico="";
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["t"])){
         $idTexto=$_GET["t"];
-        $query = "SELECT texto_id, texto_titulo,texto_contenido,texto_autor, texto_subtitulo, texto_fecha, texto_resenia,IFNULL(texto_imagen,'default_texto.jpg') texto_imagen,texto_publico FROM textos WHERE texto_id=?";
+        $query = "SELECT texto_id, texto_titulo,texto_contenido,texto_autor, texto_subtitulo, texto_fecha, texto_resenia,texto_imagen,texto_imagen_resenia,texto_publico,texto_seccion FROM textos WHERE texto_id=?" . $publico;
         
         $st = $dbh->prepare($query);
         $st->bindParam(1,$idTexto);
@@ -21,10 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $texto->subtitulo=$resData["texto_subtitulo"];
         $texto->fecha=$resData["texto_fecha"];
         $texto->resenia=$resData["texto_resenia"];
+        $texto->imagenResenia=$resData["texto_imagen_resenia"];
         $texto->imagen=$resData["texto_imagen"];
         $texto->autor=$resData["texto_autor"];
         $texto->texto=$resData["texto_contenido"];
         $texto->publico=$resData["texto_publico"];
+        $texto->seccion=$resData["texto_seccion"];
         
         //HAGO ESTO PARA QUE EL ADMIN PUEDA VER LAS IMAGENES
         $texto->texto = str_replace('img src="','img src="' . $BSO_RADIO_CLI_DIR,$texto->texto);
@@ -32,9 +40,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode($texto);
     }
     else{
+        $LIMITE = 10;
+        $pagina=0;
+        if (isset($_GET["p"])){
+            $pagina=($_GET["p"]-1);
+        }
+        $offset = $LIMITE*$pagina;
+        
+        $info= array();
+        
+        if (!isset($_GET["tp"]) || $_GET["tp"]==0){
+            $queryCount = "SELECT COUNT(*) cant FROM textos WHERE 1=1" . $publico;
+            $st = $dbh->prepare($queryCount);
+            $st->execute();
+            $resData = $st->fetch();
+            $info['paginas']=ceil($resData["cant"]/($LIMITE*1.0));
+        }
+        
         $textos=array();
         
-        $query = "SELECT texto_id, texto_titulo,texto_autor, texto_subtitulo, texto_fecha, texto_resenia,IFNULL(texto_imagen,'default_texto.jpg') texto_imagen,texto_publico FROM textos ORDER BY texto_fecha DESC";
+        $query = "SELECT texto_id, texto_titulo,texto_autor, texto_subtitulo, texto_fecha, texto_resenia,texto_imagen_resenia,texto_seccion,texto_publico";
+        $query.= " FROM textos WHERE 1=1" . $publico . " ORDER BY texto_id DESC LIMIT 10 OFFSET " . $offset;
         
         $st = $dbh->prepare($query);
         $st->execute();
@@ -45,13 +71,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $texto->subtitulo=$resData["texto_subtitulo"];
             $texto->fecha=$resData["texto_fecha"];
             $texto->resenia=$resData["texto_resenia"];
-            $texto->imagen=$resData["texto_imagen"];
+            $texto->imagen=$resData["texto_imagen_resenia"];
             $texto->autor=$resData["texto_autor"];
+            $texto->seccion=$resData["texto_seccion"];
             $texto->publico=$resData["texto_publico"];
             $textos[]=$texto;
         }
+        $info['textos']=$textos;
         
-        echo json_encode($textos);
+        echo json_encode($info);
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -110,20 +138,20 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         
         if ($texto->editando){
-            $update = "UPDATE textos SET texto_titulo=?, texto_subtitulo=?, texto_fecha=?, texto_contenido=?, texto_resenia=?, texto_imagen=?, texto_autor=? WHERE texto_id=?";
+            $update = "UPDATE textos SET texto_titulo=?, texto_subtitulo=?, texto_fecha=?, texto_contenido=?, texto_resenia=?, texto_autor=?, texto_seccion=? WHERE texto_id=?";
             $st = $dbh->prepare($update);
             $st->bindParam(1,$texto->titulo);
             $st->bindParam(2,$texto->subtitulo);
             $st->bindParam(3,$texto->fecha);
             $st->bindParam(4,$texto->texto);
             $st->bindParam(5,$texto->resenia);
-            $st->bindParam(6,$texto->imagen);
-            $st->bindParam(7,$texto->autor);
+            $st->bindParam(6,$texto->autor);
+            $st->bindParam(7,$texto->seccion);
             $st->bindParam(8,$texto->id);
             $st->execute();
         }
         else{
-            $insert = "INSERT INTO textos (texto_titulo, texto_subtitulo, texto_fecha, texto_contenido, texto_resenia, texto_imagen, texto_autor)";
+            $insert = "INSERT INTO textos (texto_titulo, texto_subtitulo, texto_fecha, texto_contenido, texto_resenia, texto_autor, texto_seccion)";
             $insert = $insert . " VALUES(?,?,?,?,?,?,?)";
             
             $st = $dbh->prepare($insert);
@@ -132,8 +160,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(3,$texto->fecha);
             $st->bindParam(4,$texto->texto);
             $st->bindParam(5,$texto->resenia);
-            $st->bindParam(6,$texto->imagen);
-            $st->bindParam(7,$texto->autor);
+            $st->bindParam(6,$texto->autor);
+            $st->bindParam(6,$texto->seccion);
             $st->execute();
             
         }

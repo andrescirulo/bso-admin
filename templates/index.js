@@ -18,11 +18,22 @@ function scrollTo(element, to, duration) {
     }, 10);
 }
 
+function reloadScrollBars() {
+    document.documentElement.style.overflow = 'auto';  // firefox, chrome
+    document.body.scroll = "yes"; // ie only
+}
+
+function unloadScrollBars() {
+    document.documentElement.style.overflow = 'hidden';  // firefox, chrome
+    document.body.scroll = "no"; // ie only
+}
+
 const routes = [
   { path: '/', component: Inicio },
+  { path: '/inicio/:pagina', component: Inicio },
   { path: '/temporadas', component: Temporadas },
-  { path: '/bso-escribe', component: BsoEscribe },
-  { path: '/bso-escucha', component: BsoEscucha },
+  { path: '/bso-escribe/:pagina', component: BsoEscribe },
+  { path: '/bso-escucha/:pagina', component: BsoEscucha },
   { path: '/cuadernos', component: Cuadernos },
   { path: '/quienes-somos', component: QuienesSomos },
   { path: '/capitulo/:id', component: Capitulo },
@@ -38,6 +49,7 @@ const router = new VueRouter({
 	})
 
 router.beforeEach((to, from, next) => {
+	//NO HAGO NADA CON EL CAROUSEL, NI LO PONGO
 	 scrollTo(document.documentElement,0,1000);
 	 next();
 })
@@ -45,10 +57,29 @@ router.beforeEach((to, from, next) => {
 new Vue({
 	router,
     data () {
-		  return { }
+		  return { 
+		  		  imagenGrande:false,
+				  timer:null}
 	},
 	mounted(){
 		updateMinHeight();
+		this.timer=setInterval(this.setImagenInicial,200);
+	},
+	methods:{
+		setImagenInicial: function(){
+			let subcontainer=document.getElementById('submain-panel');
+			if (subcontainer!=null && subcontainer.offsetWidth>50){
+				clearInterval(this.timer);
+				this.mostrarImagenGrande();
+				let navBar=document.getElementById("navBar");
+				sticky=navBar.offsetTop;
+			}
+		},
+		mostrarImagenGrande: function(){
+			let subcontainer=document.getElementById('submain-panel');
+			if (subcontainer==null){return true;}
+			this.imagenGrande=(subcontainer.offsetWidth>720);
+		}
 	}
 }).$mount('#app')
 

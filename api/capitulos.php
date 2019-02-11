@@ -4,12 +4,18 @@ require_once 'domain/temporada.php';
 require_once 'connect.php';
 
 header('Content-Type: application/json');
+session_save_path('sessions');
+session_start();
+$publico=" AND capi_publico=1";
+if (isset($_SESSION["admin"]) && $_SESSION["admin"] === true){
+    $publico="";
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["t"])){
         $capitulos = array();
         
-        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_link,capi_publico FROM capitulos WHERE capi_temporada=?";
+        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_link,capi_publico FROM capitulos WHERE capi_temporada=?" . $publico;
         $st = $dbh->prepare($query);
         $st->bindParam(1,$_GET["t"]);
         $st->execute();
@@ -26,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode($capitulos);
     }
     elseif (isset($_GET["c"])){
-        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_link_descargar,capi_link_escuchar,capi_fecha,capi_texto,IFNULL(capi_imagen,'default_capitulo.jpg') capi_imagen,capi_publico FROM capitulos WHERE capi_numero=?";
+        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_titulo,capi_link_descargar,capi_link_ivoox,capi_link_mixcloud,capi_fecha,capi_texto,IFNULL(capi_imagen,'default_capitulo.jpg') capi_imagen,capi_publico FROM capitulos WHERE capi_numero=?" . $publico;
         $st = $dbh->prepare($query);
         $st->bindParam(1,$_GET["c"]);
         $st->execute();
@@ -36,8 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $capitulo->fecha= $resData["capi_fecha"];
         $capitulo->numero = $resData["capi_numero"];
         $capitulo->nombre = $resData["capi_nombre"];
+        $capitulo->titulo = $resData["capi_titulo"];
         $capitulo->linkDescargar = $resData["capi_link_descargar"];
-        $capitulo->linkEscuchar = $resData["capi_link_escuchar"];
+        $capitulo->linkIvoox = $resData["capi_link_ivoox"];
+        $capitulo->linkMixcloud = $resData["capi_link_mixcloud"];
         $capitulo->texto = $resData["capi_texto"];
         $capitulo->imagen = $resData["capi_imagen"];
         $capitulo->publico = $resData["capi_publico"];
@@ -47,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     elseif (isset($_GET["r"])){
         $capitulos = array();
         $idRef=$_GET["r"];
-        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_fecha,capi_imagen,capi_publico FROM capitulos WHERE capi_numero<>? ORDER BY capi_fecha desc LIMIT 5";
+        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_fecha,capi_imagen,capi_publico FROM capitulos WHERE capi_numero<>?" . $publico . " ORDER BY capi_fecha desc LIMIT 5";
         $st = $dbh->prepare($query);
         $st->bindParam(1,$idRef);
         $st->execute();
@@ -64,26 +72,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode($capitulos);
     }
     else{
-        $capitulos = array();
-        
-        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_link_descargar,capi_link_escuchar,capi_fecha,capi_texto,IFNULL(capi_imagen,'default_capitulo.jpg') capi_imagen,capi_publico FROM capitulos ORDER BY capi_numero DESC LIMIT 10";
-        $st = $dbh->prepare($query);
-        $st->execute();
-        while ($resData = $st->fetch()) {
-            $capitulo = new Capitulo();
-            $capitulo->temporada = $resData["capi_temporada"];
-            $capitulo->fecha= $resData["capi_fecha"];
-            $capitulo->numero = $resData["capi_numero"];
-            $capitulo->nombre = $resData["capi_nombre"];
-            $capitulo->linkDescargar = $resData["capi_link_descargar"];
-            $capitulo->linkEscuchar = $resData["capi_link_escuchar"];
-            $capitulo->texto = $resData["capi_texto"];
-            $capitulo->imagen = $resData["capi_imagen"];
-            $capitulo->publico = $resData["capi_publico"];
-            $capitulos[] = $capitulo;
-        }
-        
-        echo json_encode($capitulos);
     }
 }
 elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -105,30 +93,32 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else{
         if ($capitulo->editando){
-            $update = "UPDATE capitulos SET capi_temporada=?, capi_nombre=?, capi_link_descargar=?, capi_fecha=?, capi_texto=?, capi_link_escuchar=?, capi_imagen=? WHERE capi_numero=?";
+            $update = "UPDATE capitulos SET capi_temporada=?, capi_nombre=?, capi_titulo=?, capi_link_descargar=?, capi_fecha=?, capi_texto=?, capi_link_ivoox=?, capi_link_mixcloud=? WHERE capi_numero=?";
             $st = $dbh->prepare($update);
             $st->bindParam(1,$capitulo->temporada);
             $st->bindParam(2,$capitulo->nombre);
-            $st->bindParam(3,$capitulo->linkDescargar);
-            $st->bindParam(4,$capitulo->fecha);
-            $st->bindParam(5,$capitulo->texto);
-            $st->bindParam(6,$capitulo->linkEscuchar);
-            $st->bindParam(7,$capitulo->imagen);
-            $st->bindParam(8,$capitulo->numero);
+            $st->bindParam(3,$capitulo->titulo);
+            $st->bindParam(4,$capitulo->linkDescargar);
+            $st->bindParam(5,$capitulo->fecha);
+            $st->bindParam(6,$capitulo->texto);
+            $st->bindParam(7,$capitulo->linkIvoox);
+            $st->bindParam(8,$capitulo->linkMixcloud);
+            $st->bindParam(9,$capitulo->numero);
             $st->execute();
         }
         else{
-            $insert = "INSERT INTO capitulos (capi_temporada, capi_numero, capi_nombre, capi_link_descargar, capi_fecha, capi_texto, capi_link_escuchar, capi_imagen)";
-            $insert = $insert . " VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+            $insert = "INSERT INTO capitulos (capi_temporada, capi_numero, capi_nombre, capi_titulo, capi_link_descargar, capi_fecha, capi_texto, capi_link_ivoox, capi_link_mixcloud)";
+            $insert = $insert . " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $st = $dbh->prepare($insert);
             $st->bindParam(1,$capitulo->temporada);
             $st->bindParam(2,$capitulo->numero);
             $st->bindParam(3,$capitulo->nombre);
-            $st->bindParam(4,$capitulo->linkDescargar);
-            $st->bindParam(5,$capitulo->fecha);
-            $st->bindParam(6,$capitulo->texto);
-            $st->bindParam(7,$capitulo->linkEscuchar);
-            $st->bindParam(8,$capitulo->imagen);
+            $st->bindParam(4,$capitulo->titulo);
+            $st->bindParam(5,$capitulo->linkDescargar);
+            $st->bindParam(6,$capitulo->fecha);
+            $st->bindParam(7,$capitulo->texto);
+            $st->bindParam(8,$capitulo->linkIvoox);
+            $st->bindParam(9,$capitulo->linkMixcloud);
             $ok=$st->execute();
             if ($ok === true){
                 error_log("\nOK capitulo",3,'errors.log');
