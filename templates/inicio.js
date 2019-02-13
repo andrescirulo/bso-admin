@@ -25,6 +25,9 @@ const Inicio = { template: '<div>'+
 						'<v-btn small v-if="post.tipo==\'CAPITULO\'" color="teal lighten-1" dark :href="\'#/capitulo/\' + post.id">Leer Más</v-btn>' + 
 						'<v-btn small v-if="post.tipo==\'TEXTO\'" color="teal lighten-1" dark :href="\'#/texto/\' + post.id">Leer Más</v-btn>' + 
 						'<v-btn small v-if="post.tipo==\'ENTREVISTA\'" color="teal lighten-1" dark :href="\'#/bso-escucha/1\'">Ver entrevistas</v-btn>' +
+						'<v-btn icon ripple color="green" dark @click="copiarStaticLink(post)">'+
+							'<v-icon color="white">assignment</v-icon>'+
+						'</v-btn>'+ 
 						'<v-chip class="v-btn--small" style="margin-top: 0px; margin-bottom: 0px;" label :color="getColorTag(post)" text-color="white">' +
 				      		'<v-icon left>label</v-icon>{{getTextoTag(post)}}' +
 				      	'</v-chip>' +
@@ -117,6 +120,22 @@ const Inicio = { template: '<div>'+
 			let fechaLim=dayjs().subtract(14, 'day');
 			let fechaPost=dayjs(post.fecha);
 			return fechaPost.isAfter(fechaLim);
+		},
+		copiarStaticLink:function(post){
+		  let url='https://www.bsoradio.com.ar/static/';
+		  url+=post.tipo.toLowerCase() + '_' + post.id + ".html";
+			
+		  /* Get the text field */
+		  var copyText = document.getElementById("clip");
+		  copyText.value=url;
+
+		  /* Select the text field */
+		  copyText.style.display="block";
+		  copyText.select();
+
+		  /* Copy the text inside the text field */
+		  document.execCommand("copy");
+		  copyText.style.display="none";
 		}
 	},
 	watch:{

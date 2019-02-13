@@ -1,0 +1,14 @@
+Commits recibidos commit 718380e4981c28b2c45d37a3ca9ab271be8620ba
+Se agrega la generacion de estaticos al publicar
+
+commit 47b962e46550ff1097f5c1cda34065bff52f68d3
+Version 1.0
+
+commit e13cd83c197d5a964e0668522f8f76a22cadd571
+Cuando se agrega una imagen en un texto, se procesa del lado del servidor para guardarla mejor
+
+commit 4d032339d5d7db7ecee5d7fa58e3fb833bf756ad
+Agregadas validaciones e impresion de errores al dar de alta o modificar capitulos, entrevistas y textos
+
+commit a2db780995a430eda01b59a01da3408b87b7434d
+Arreglado el Logo

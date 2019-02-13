@@ -102,9 +102,10 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $capi->imagen = $resData["capi_imagen"];
             
             include_once('static_generator.php');
-            $url = 'https://www.bsoradio.com.ar/#/capitulo/' . $capi->numero;
+            $url = 'https://www.bsoradio.com.ar/static/capitulo_' . $capi->numero . '.html';
+            $urlRedir = 'https://www.bsoradio.com.ar/#/capitulo/' . $capi->numero;
             $imagen = 'https://www.bsoradio.com.ar/imagenes/' . $capi->imagen;
-            generarStatic('capitulo_' . $capi->numero,$capi->titulo,$imagen,$capi->texto,$url);
+            generarStatic('capitulo_' . $capi->numero,$capi->titulo,$imagen,$capi->texto,$url,$urlRedir);
         }
         echo json_encode($res);
     }
