@@ -88,6 +88,23 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(2,$capitulo->capitulo);
             $st->execute();
             $res["respuesta"]="OK";
+            
+            
+            $query = "SELECT capi_numero, capi_titulo,capi_texto,capi_imagen FROM capitulos WHERE capi_numero=?";
+            $st = $dbh->prepare($query);
+            $st->bindParam(1,$capitulo->capitulo);
+            $st->execute();
+            $resData = $st->fetch();
+            $capi = new Capitulo();
+            $capi->numero = $resData["capi_numero"];
+            $capi->titulo = $resData["capi_titulo"];
+            $capi->texto = $resData["capi_texto"];
+            $capi->imagen = $resData["capi_imagen"];
+            
+            include_once('static_generator.php');
+            $url = 'https://www.bsoradio.com.ar/#/capitulo/' . $capi->numero;
+            $imagen = 'https://www.bsoradio.com.ar/imagenes/' . $capi->imagen;
+            generarStatic('capitulo_' . $capi->numero,$capi->titulo,$imagen,$capi->texto,$url);
         }
         echo json_encode($res);
     }
@@ -128,6 +145,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log("\n" . print_r($st->errorInfo(),true),3,'errors.log');
             }
         }
+        
         echo json_encode($capitulo);
     }
 	

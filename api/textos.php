@@ -96,6 +96,22 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(2,$request->texto);
             $st->execute();
             $res["respuesta"]="OK";
+            
+            $query = "SELECT texto_id, texto_titulo,texto_contenido,texto_autor, texto_subtitulo, texto_fecha, texto_resenia,texto_imagen,texto_imagen_resenia,texto_publico,texto_seccion FROM textos WHERE texto_id=?" . $publico;
+            $st = $dbh->prepare($query);
+            $st->bindParam(1,$request->texto);
+            $st->execute();
+            $resData = $st->fetch();
+            $texto = new Texto();
+            $texto->id=$resData["texto_id"];
+            $texto->titulo=$resData["texto_titulo"];
+            $texto->resenia=$resData["texto_resenia"];
+            $texto->imagenResenia=$resData["texto_imagen_resenia"];
+            
+            include_once('static_generator.php');
+            $url = 'https://www.bsoradio.com.ar/#/texto/' . $texto->id;
+            $imagen = 'https://www.bsoradio.com.ar/imagenes/' . $texto->imagenResenia;
+            generarStatic('texto_' . $texto->id,$texto->titulo,$imagen,$texto->resenia,$url);
         }
         echo json_encode($res);
     }
