@@ -178,7 +178,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(4,$texto->texto);
             $st->bindParam(5,$texto->resenia);
             $st->bindParam(6,$texto->autor);
-            $st->bindParam(6,$texto->seccion);
+            $st->bindParam(7,$texto->seccion);
             $st->execute();
             
         }
