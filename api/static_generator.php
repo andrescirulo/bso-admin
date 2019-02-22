@@ -9,10 +9,13 @@ function getStaticBaseDir(){
 function generarStatic($archivo,$titulo,$imagen,$descripcion,$url,$urlRedir){
     $basepath=getStaticBaseDir();
     
+    $titu = str_replace('"','&quot;',$titulo);
+    $desc = str_replace('"','&quot;',trim(strip_tags($descripcion)));
+    
     $content=file_get_contents('static_template.html');
-    $content=str_replace('{{titulo}}',$titulo,$content);
+    $content=str_replace('{{titulo}}',$titu,$content);
     $content=str_replace('{{imagen}}',$imagen,$content);
-    $content=str_replace('{{descripcion}}',trim(strip_tags($descripcion)),$content);
+    $content=str_replace('{{descripcion}}',$desc,$content);
     $content=str_replace('{{url}}',$url,$content);
     $content=str_replace('{{urlRedir}}',$urlRedir,$content);
     
