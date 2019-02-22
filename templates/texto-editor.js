@@ -21,7 +21,7 @@ const TextoEditor = { template: '<div>'+
 					'<v-text-field v-model="texto.titulo" :counter="100" label="Título" required></v-text-field>' +
 					'<v-text-field v-model="texto.subtitulo" :counter="150" label="Subtítulo" required></v-text-field>' +
 					'<v-text-field v-model="texto.autor" :counter="50" label="Autor" required></v-text-field>' +
-					'<v-text-field class="textarea-label" v-model="texto.resenia" multi-line :counter="1000" label="Reseña" required></v-text-field>' +
+					'<v-textarea class="textarea-label" v-model="texto.resenia" :counter="1000" label="Reseña" required></v-textarea>' +
 					'<v-dialog ref="dialog" v-model="modal" :return-value.sync="texto.fecha" persistent lazy full-width width="290px" >' +
 						'<v-text-field class="fecha-picker" slot="activator" v-model="texto.fecha" label="Fecha" readonly></v-text-field>' +
 						'<v-date-picker v-model="texto.fecha" scrollable>' +
