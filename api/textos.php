@@ -166,17 +166,20 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         
+        $seccion = ($texto->seccion==null || trim($texto->seccion)=='')?null:$texto->seccion;
+        $subtitulo = ($texto->subtitulo==null || trim($texto->subtitulo)=='')?null:$texto->subtitulo;
+        
         
         if ($texto->editando){
             $update = "UPDATE textos SET texto_titulo=?, texto_subtitulo=?, texto_fecha=?, texto_contenido=?, texto_resenia=?, texto_autor=?, texto_seccion=? WHERE texto_id=?";
             $st = $dbh->prepare($update);
             $st->bindParam(1,$texto->titulo);
-            $st->bindParam(2,$texto->subtitulo);
+            $st->bindParam(2,$subtitulo);
             $st->bindParam(3,$texto->fecha);
             $st->bindParam(4,$texto->texto);
             $st->bindParam(5,$texto->resenia);
             $st->bindParam(6,$texto->autor);
-            $st->bindParam(7,$texto->seccion);
+            $st->bindParam(7,$seccion);
             $st->bindParam(8,$texto->id);
             $st->execute();
         }
@@ -186,12 +189,12 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $st = $dbh->prepare($insert);
             $st->bindParam(1,$texto->titulo);
-            $st->bindParam(2,$texto->subtitulo);
+            $st->bindParam(2,$subtitulo);
             $st->bindParam(3,$texto->fecha);
             $st->bindParam(4,$texto->texto);
             $st->bindParam(5,$texto->resenia);
             $st->bindParam(6,$texto->autor);
-            $st->bindParam(7,$texto->seccion);
+            $st->bindParam(7,$seccion);
             $st->execute();
             
         }
