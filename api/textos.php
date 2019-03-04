@@ -3,8 +3,15 @@ require_once 'domain/texto.php';
 require_once 'connect.php';
 
 header('Content-Type: application/json');
+/*--DESARROLLO--*/
 $BSO_RADIO_CLI_DIR="../bso-radio/";
 $BSO_RADIO_DIR="../../bso-radio/";
+
+/*--PRODUCCCION--
+$BSO_RADIO_CLI_DIR="https://www.bsoradio.com.ar/";
+$BSO_RADIO_DIR="../../public_html/";
+*/
+
 session_save_path('sessions');
 session_start();
 $publico=" AND texto_publico=1";
@@ -146,9 +153,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 error_log("\n\nPUM 1 ",3,'errors.log');
             }
             
-            $randName = uniqid("txt-") . "." . $type;
-            file_put_contents($BSO_RADIO_DIR . "imagenes/textos/" . $randName, $data);
+            $idName = uniqid("txt-");
+            $randSrcName = $idName . "_src." . $type;
+            $randName = $idName . ".jpg";
+            file_put_contents($BSO_RADIO_DIR . "imagenes/tmp/" . $randSrcName, $data);
+            
             // VER DE REPROCESAR LA IMAGEN PARA QUE TENGA UN TAMAÑO MAXIMO
+            include_once 'image_processor.php';
+            generarJpgConMax($BSO_RADIO_DIR . "imagenes/tmp/" . $randSrcName,$BSO_RADIO_DIR . "imagenes/textos/" . $randName,$type,1000);
+            
             $texto->texto=str_replace($data64 . '"',"imagenes/textos/" . $randName . '" style="width:100%"',$texto->texto);
         }
         
