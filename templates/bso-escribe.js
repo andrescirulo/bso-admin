@@ -12,7 +12,9 @@ const BsoEscribe = { template: '<div>'+
 					 '<v-btn ripple color="cyan" dark :href="\'#/texto-editor/new\'">'+
 						'<v-icon color="white">add</v-icon>Agregar Texto'+
 					 '</v-btn>'+ 
-					 '<v-card v-if="textos.length>0" v-for="(tex,i) in textos" :key="i" style="margin-bottom:10px">' + 
+					 '<v-card class="tag-parent" v-if="textos.length>0" v-for="(tex,i) in textos" :key="i" style="margin-bottom:10px">' +
+					 	'<div v-if="tex.publico==0" class="tagged borrador-tag">BORRADOR</div>' +
+					 	'<div v-if="tex.publico==1" class="tagged publicado-tag">PUBLICADO</div>' +
 						'<v-container fluid grid-list-lg>' + 
 						'<v-layout row wrap>' + 
 						  '<v-flex xs12 sm5>' + 

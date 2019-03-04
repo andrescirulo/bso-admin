@@ -273,3 +273,27 @@
 	max-height: 100vh;
 	max-width: 100vw;
 }
+
+.tag-parent{
+	overflow: hidden;
+}
+
+.tagged{
+	position: absolute;
+    color: white;
+    font-size: 12pt;
+    bottom: 28px;
+    text-align: center;
+    right: -35px;
+    padding: 5px;
+    transform: rotate(-45deg);
+    width: 160px;
+    overflow: hidden;
+}
+
+.borrador-tag{
+    background: red;
+}
+.publicado-tag{
+    background: green;
+}

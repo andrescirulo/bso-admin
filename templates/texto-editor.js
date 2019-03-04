@@ -55,10 +55,11 @@ const TextoEditor = { template: '<div>'+
 						'<v-icon color="white" >public</v-icon>'+
 						'Publicar' +
 					'</v-btn>' +
-					'<v-btn color="orange" dark v-if="texto.publico!=null && texto.publico==1" v-on:click="onPublicar()">' +
-						'<v-icon color="white" >public</v-icon>'+
-						'Des(?)Publicar' +
+			        '<v-btn color="orange" dark  v-if="texto.publico!=null && texto.publico==1" v-on:click="onPublicar()">' +
+							'<v-icon color="white" >public</v-icon>'+
+							'Volver a borrador' +
 					'</v-btn>' +
+					
 				'</v-card-actions>' +
 			'</v-card>' +
 		'</v-flex>' +
