@@ -116,7 +116,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $texto->imagenResenia=$resData["texto_imagen_resenia"];
             
             include_once('static_generator.php');
-            $url = 'https://www.bsoradio.com.ar/static/texto_' . $tex->id . '.html';
+            $url = 'https://www.bsoradio.com.ar/static/texto_' . $texto->id . '.html';
             $urlRedir = 'https://www.bsoradio.com.ar/#/texto/' . $texto->id;
             $imagen = 'https://www.bsoradio.com.ar/imagenes/' . $texto->imagenResenia;
             generarStatic('texto_' . $texto->id,$texto->titulo,$imagen,$texto->resenia,$url,$urlRedir);
