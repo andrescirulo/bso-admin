@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $posts = array();
     
     if (!isset($_GET["tp"]) || $_GET["tp"]==0){
-        $queryCount = "SELECT COUNT(*) cant FROM bso_radio.v_posts WHERE 1=1" . $publico;
+        $queryCount = "SELECT COUNT(*) cant FROM v_posts WHERE 1=1" . $publico;
         $st = $dbh->prepare($queryCount);
         $st->execute();
         $resData = $st->fetch();
