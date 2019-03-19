@@ -34,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     else{
         $temporadas=array();
         
-        $query = "SELECT capi_temporada,capi_temporada_desc,DATE_FORMAT(capi_fecha, '%Y') temp_anio,COUNT(*) cant_capitulos";
-        $query .= " FROM capitulos WHERE  1=1" . $publico . " GROUP BY capi_temporada,capi_temporada_desc,DATE_FORMAT(capi_fecha, '%Y')  ORDER BY capi_temporada DESC";
+        $query = "SELECT capi_temporada,capi_temporada_desc,MAX(DATE_FORMAT(capi_fecha, '%Y')) temp_anio,COUNT(*) cant_capitulos";
+        $query .= " FROM capitulos WHERE  1=1" . $publico . " GROUP BY capi_temporada,capi_temporada_desc ORDER BY capi_temporada DESC";
         $st = $dbh->prepare($query);
         $st->execute();
         while ($resData = $st->fetch()) {

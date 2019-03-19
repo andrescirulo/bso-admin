@@ -7,7 +7,7 @@ const Capitulo = { template: '<div>'+
 		'<v-layout v-if="capitulo!=null">' +
 		'<v-flex xs12>' +
 		  '<v-card style="margin:10px" >' +
-			'<v-img v-if="capitulo.imagen!=null" :src="\'imagenes/\' + capitulo.imagen" height="400px" class="grey lighten-2">' + 
+			'<v-img v-if="capitulo.imagen!=null" :src="basepath + \'imagenes/\' + capitulo.imagen" height="400px" class="grey lighten-2">' + 
 		  		'<v-layout slot="placeholder" fill-height align-center justify-center ma-0>' + 
 		  			'<v-progress-circular indeterminate color="teal"></v-progress-circular>' +
 		  		'</v-layout>' +
@@ -40,7 +40,7 @@ const Capitulo = { template: '<div>'+
 			'</div>'+
 			'<v-flex v-if="relacionados.length>0"  v-for="(rel,i) in relacionados" :key="i" xs12>' +
 			  '<v-card style="margin:10px" raised hover :href="\'#/capitulo/\' + rel.numero" >' +
-				'<v-img v-if="rel.imagen!=null" :src="\'imagenes/\' + rel.imagen" height="50px">' +
+				'<v-img v-if="rel.imagen!=null" :src="basepath + \'imagenes/\' + rel.imagen" height="50px">' +
 					'<v-layout slot="placeholder" fill-height align-center justify-center ma-0>' + 
 		  				'<v-progress-circular indeterminate color="teal"></v-progress-circular>' +
 		  			'</v-layout>' +

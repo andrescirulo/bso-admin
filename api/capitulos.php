@@ -71,6 +71,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
         echo json_encode($capitulos);
     }
+    elseif (isset($_GET["tn"])){
+        $capitulos = array();
+        if ($_GET["tn"]==0){
+            $query = "SELECT MIN(capi_numero) maximo FROM capitulos";
+            $paso = -1;
+        }
+        else{
+            $query = "SELECT MAX(capi_numero) maximo FROM capitulos";
+            $paso = 1;
+        }
+        
+        $st = $dbh->prepare($query);
+        $st->execute();
+        $resData = $st->fetch();
+        
+        $num = $resData["maximo"] + $paso;
+        $res = array();
+        $res["num"] = $num;
+        echo json_encode($res);
+    }
     else{
     }
 }
@@ -107,6 +127,13 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $imagen = 'https://www.bsoradio.com.ar/imagenes/' . $capi->imagen;
             generarStatic('capitulo_' . $capi->numero,$capi->titulo,$imagen,$capi->texto,$url,$urlRedir);
         }
+        elseif ($capitulo->operacion=="ELIMINAR"){
+            $update = "DELETE FROM capitulos WHERE capi_numero=?";
+            $st = $dbh->prepare($update);
+            $st->bindParam(1,$capitulo->capitulo);
+            $st->execute();
+            $res["respuesta"]="OK";
+        }
         echo json_encode($res);
     }
     else{
@@ -125,8 +152,15 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->execute();
         }
         else{
-            $insert = "INSERT INTO capitulos (capi_temporada, capi_numero, capi_nombre, capi_titulo, capi_link_descargar, capi_fecha, capi_texto, capi_link_ivoox, capi_link_mixcloud)";
-            $insert = $insert . " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            if ($capitulo->temporada==0){
+                $tempDesc = 'Spinoff!';
+            }
+            else{
+                $tempDesc= 'Temporada ' . $capitulo->temporada;
+            }
+            
+            $insert = "INSERT INTO capitulos (capi_temporada, capi_numero, capi_nombre, capi_titulo, capi_link_descargar, capi_fecha, capi_texto, capi_link_ivoox, capi_link_mixcloud,capi_temporada_desc)";
+            $insert = $insert . " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
             $st = $dbh->prepare($insert);
             $st->bindParam(1,$capitulo->temporada);
             $st->bindParam(2,$capitulo->numero);
@@ -137,6 +171,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(7,$capitulo->texto);
             $st->bindParam(8,$capitulo->linkIvoox);
             $st->bindParam(9,$capitulo->linkMixcloud);
+            $st->bindParam(10,$tempDesc);
             $ok=$st->execute();
             if ($ok === true){
                 error_log("\nOK capitulo",3,'errors.log');

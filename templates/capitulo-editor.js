@@ -17,11 +17,11 @@ const CapituloEditor = { template: '<div>'+
 				'<h2 v-if="!capitulo.editando">Nuevo Capítulo</h2>' + 
 				'<h2 v-if="capitulo.editando">Editando capítulo</h2>' + 
 				'<v-form ref="form" lazy-validation>' + 
-					'<v-text-field v-model="capitulo.numero" type="number" label="Número" required></v-text-field>' +
-					'<v-select :items="temporadas" v-model="capitulo.temporada" label="Temporada" required></v-select>' + 
+					'<v-text-field v-model="capitulo.numero" type="number" disabled="disabled" label="Número" required></v-text-field>' +
+					'<v-select :items="temporadas" item-text="descripcion" item-value="num" v-model="capitulo.temporada" label="Temporada" v-on:change="onTemporadaSelected($event)" required></v-select>' + 
 					'<v-text-field v-model="capitulo.nombre" :counter="50" label="Nombre" required></v-text-field>' +
 					'<v-text-field v-model="capitulo.titulo" :counter="50" label="Titulo" required></v-text-field>' +
-					'<v-text-field class="textarea-label" v-model="capitulo.texto" multi-line :counter="1000" label="Texto" required></v-text-field>' +
+					'<v-textarea class="textarea-label" v-model="capitulo.texto" multi-line :counter="1000" label="Texto" required></v-textarea>' +
 					'<v-dialog ref="dialog" v-model="modal" :return-value.sync="capitulo.fecha" persistent lazy full-width width="290px" >' +
 						'<v-text-field class="fecha-picker" slot="activator" v-model="capitulo.fecha" label="Fecha" readonly></v-text-field>' +
 						'<v-date-picker v-model="capitulo.fecha" scrollable>' +
@@ -30,13 +30,13 @@ const CapituloEditor = { template: '<div>'+
 							'<v-btn flat color="primary" @click="$refs.dialog.save(capitulo.fecha)">OK</v-btn>' +
 						'</v-date-picker>' +
 					'</v-dialog>' +
-					'<v-text-field v-model="capitulo.linkDescargar" :counter="100" label="Link para Descargar" required></v-text-field>' +
-					'<v-text-field v-model="capitulo.linkIvoox" :counter="100" label="Link de Ivoox" required></v-text-field>' +
-					'<v-text-field v-model="capitulo.linkMixcloud" :counter="100" label="Link de Mixcloud" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.linkDescargar" :counter="300" label="Link para Descargar" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.linkIvoox" :counter="300" label="Link de Ivoox" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.linkMixcloud" :counter="300" label="Link de Mixcloud" required></v-text-field>' +
 					'<image-uploader v-bind:idElem="capitulo.numero" v-bind:tipo="\'CAPITULO\'" v-bind:path="\'capitulos\'" v-bind:imagenUrl="capitulo.imagen"></image-uploader>' +
 				'</v-form>' +
 				'<v-card-actions style="justify-content: flex-end;">' +
-					'<v-btn color="red" dark >' +
+					'<v-btn color="red" dark v-if="capitulo.editando" v-on:click="onEliminar()">' +
 						'<v-icon color="white">delete</v-icon>'+
 						'Eliminar' +
 					'</v-btn>' +
@@ -56,11 +56,35 @@ const CapituloEditor = { template: '<div>'+
 			'</v-card>' +
 		'</v-flex>' +
 	  '</v-layout>' +
+	  
+	  '<v-dialog v-model="dialog" max-width="350">' +
+      	'<v-card>' +
+      		'<v-card-title class="headline">Confirmar Eliminación</v-card-title>' +
+      		'<v-card-text>' +
+      			'¿Estás seguro que queres eliminar el capitulo? Esta acción no se puede deshacer.' +
+      		'</v-card-text>' +
+      		'<v-card-actions>' +
+      			'<v-btn class="secondary" @click="dialog = false">No</v-btn>' +
+      			'<v-btn class="primary" @click="dialog = false">Si</v-btn>' +
+      		'</v-card-actions>' +
+      	'</v-card>' +
+      '</v-dialog>' +
+	  
 	  '</v-flex>' + 
 	'</v-layout>' +
 	'</div>' ,
 	data () {
-	      return { capitulo:{},temporadas:['7','6','5','4','3','2','1'],modal: false,errores:[]}
+	      return { capitulo:{},
+	    	  temporadas:[
+		    	  {num:7,descripcion:'Temporada 7'},
+		    	  {num:6,descripcion:'Temporada 6'},
+		    	  {num:5,descripcion:'Temporada 5'},
+		    	  {num:4,descripcion:'Temporada 4'},
+		    	  {num:3,descripcion:'Temporada 3'},
+		    	  {num:2,descripcion:'Temporada 2'},
+		    	  {num:1,descripcion:'Temporada 1'},
+		    	  {num:0,descripcion:'Spinoff!'}],
+	    	  modal: false,errores:[],dialog:false}
 	},
 	mounted() {
 			const idCapitulo=this.$route.params.id;
@@ -74,6 +98,7 @@ const CapituloEditor = { template: '<div>'+
 				Vue.http.get("api/capitulos.php?c=" + idCapitulo).then(result => {
 						result.json().then(capitulo =>{
 							this.capitulo = capitulo;
+							this.capitulo.temporada=parseInt(this.capitulo.temporada);
 							this.capitulo.editando=true;
 						});
 				}, error => {
@@ -101,6 +126,17 @@ const CapituloEditor = { template: '<div>'+
 			 }
 			 return this.errores.length==0;
 		 },
+		 onTemporadaSelected: function (valor){
+			if (this.capitulo.editando == false){
+				Vue.http.get("api/capitulos.php?tn=" + valor).then(result => {
+					result.json().then(resp =>{
+						this.capitulo.numero = resp.num;
+					});
+				}, error => {
+					console.error(error);
+				});
+			}
+		 },
 		 onGuardar(){
 			if (!this.validar()){
 				scrollToTop();
@@ -116,10 +152,10 @@ const CapituloEditor = { template: '<div>'+
 			});
 		 },
 		 onPublicar(){
-			 let op = new Object();
-			 op.operacion="PUBLICAR";
-			 op.capitulo=this.capitulo.numero;
-			 op.publico=this.capitulo.publico==1?0:1;
+			let op = new Object();
+			op.operacion="PUBLICAR";
+			op.capitulo=this.capitulo.numero;
+			op.publico=this.capitulo.publico==1?0:1;
 			Vue.http.post("api/capitulos.php",op).then(result => {
 					result.json().then(res =>{
 						if (res.respuesta=="OK"){
@@ -132,6 +168,9 @@ const CapituloEditor = { template: '<div>'+
 			}, error => {
 				console.error(error);
 			});
+		 },
+		 onEliminar(){
+			 this.dialog=true;
 		 }
 	}
 }
