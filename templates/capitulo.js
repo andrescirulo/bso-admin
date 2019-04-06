@@ -48,7 +48,7 @@ const Capitulo = { template: '<div>'+
 				'<v-card-title primary-title>' +
 				  '<div>' +
 					'<h3 class="title mb-0" style="font-size:16px!important">{{rel.nombre}}</h3>' +
-					'<div>{{capitulo.fecha}}</div>' +
+					'<div>{{rel.fecha}}</div>' +
 				  '</div>' +
 				'</v-card-title>' +
 			  '</v-card>' +
