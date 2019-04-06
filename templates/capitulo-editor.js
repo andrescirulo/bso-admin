@@ -32,7 +32,7 @@ const CapituloEditor = { template: '<div>'+
 					'</v-dialog>' +
 					'<v-text-field v-model="capitulo.linkDescargar" :counter="300" label="Link para Descargar" required></v-text-field>' +
 					'<v-text-field v-model="capitulo.linkIvoox" :counter="300" label="Link de Ivoox" required></v-text-field>' +
-					'<v-text-field v-model="capitulo.linkMixcloud" :counter="300" label="Link de Mixcloud" required></v-text-field>' +
+					'<v-text-field style="margin-bottom:20px" v-model="capitulo.linkMixcloud" :counter="300" label="Link de Mixcloud" required hint="Link del capitulo. Ej: https://www.mixcloud.com/bsoradio/spinoff-04-captain-marvel-2019/" persistent-hint></v-text-field>' +
 					'<image-uploader v-bind:idElem="capitulo.numero" v-bind:tipo="\'CAPITULO\'" v-bind:path="\'capitulos\'" v-bind:imagenUrl="capitulo.imagen"></image-uploader>' +
 				'</v-form>' +
 				'<v-card-actions style="justify-content: flex-end;">' +
@@ -76,6 +76,7 @@ const CapituloEditor = { template: '<div>'+
 	data () {
 	      return { capitulo:{},
 	    	  temporadas:[
+	    		  {num:8,descripcion:'Temporada 8'},
 		    	  {num:7,descripcion:'Temporada 7'},
 		    	  {num:6,descripcion:'Temporada 6'},
 		    	  {num:5,descripcion:'Temporada 5'},
