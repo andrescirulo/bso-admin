@@ -5,11 +5,11 @@ Vue.component('cuaderno-zoom',{
 			'<img :src="getImagenZoom()" class="img-img">' +
 			'</img>' +
 			'<a nohref="nohref" @click="cerrarZoom()" class="img-close">X</a>' + 
-			'<a nohref="nohref" @click="anteriorImagen()" class="img-prev">' +
-				'<v-icon>chevron_left</v-icon>' + 
+			'<a nohref="nohref" class="img-prev">' +
+				'<v-icon @click="anteriorImagen()">chevron_left</v-icon>' + 
 			'</a>' + 
-			'<a nohref="nohref" @click="siguienteImagen()" class="img-next">' +
-				'<v-icon>chevron_right</v-icon>' + 
+			'<a nohref="nohref" class="img-next">' +
+				'<v-icon @click="siguienteImagen()">chevron_right</v-icon>' + 
 			'</a>' + 
 		'</div>' +
 	'</div>',

@@ -20,8 +20,8 @@ const Cuadernos = { template: '<div><v-card>'+
 									'</v-img>' +
 									'<v-card-actions>' +
 										'<v-spacer></v-spacer>' +
-										'<v-btn icon class="cyan">' +
-											'<v-icon>fullscreen</v-icon>' +
+										'<v-btn icon dark class="teal lighten-1" @click="hacerZoom(i)">' +
+											'<v-icon>zoom_out_map</v-icon>' +
 										'</v-btn>' +
 									'</v-card-actions>' +
 								'</v-card>' +
