@@ -17,7 +17,7 @@ const CapituloEditor = { template: '<div>'+
 				'<h2 v-if="!capitulo.editando">Nuevo Capítulo</h2>' + 
 				'<h2 v-if="capitulo.editando">Editando capítulo</h2>' + 
 				'<v-form ref="form" lazy-validation>' + 
-					'<v-text-field v-model="capitulo.numero" type="number" disabled="disabled" label="Número" required></v-text-field>' +
+					'<v-text-field v-model="capitulo.numero" :key="tmpCap" type="number" disabled="disabled" label="Número" required></v-text-field>' +
 					'<v-select :items="temporadas" item-text="descripcion" item-value="num" v-model="capitulo.temporada" label="Temporada" v-on:change="onTemporadaSelected($event)" required></v-select>' + 
 					'<v-text-field v-model="capitulo.nombre" :counter="50" label="Nombre" required></v-text-field>' +
 					'<v-text-field v-model="capitulo.titulo" :counter="50" label="Titulo" required></v-text-field>' +
@@ -85,7 +85,7 @@ const CapituloEditor = { template: '<div>'+
 		    	  {num:2,descripcion:'Temporada 2'},
 		    	  {num:1,descripcion:'Temporada 1'},
 		    	  {num:0,descripcion:'Spinoff!'}],
-	    	  modal: false,errores:[],dialog:false}
+	    	  modal: false,errores:[],dialog:false,tmpCap:null}
 	},
 	mounted() {
 			const idCapitulo=this.$route.params.id;
@@ -132,6 +132,7 @@ const CapituloEditor = { template: '<div>'+
 				Vue.http.get("api/capitulos.php?tn=" + valor).then(result => {
 					result.json().then(resp =>{
 						this.capitulo.numero = resp.num;
+						this.tmpCap = resp.num;
 					});
 				}, error => {
 					console.error(error);
@@ -173,5 +174,10 @@ const CapituloEditor = { template: '<div>'+
 		 onEliminar(){
 			 this.dialog=true;
 		 }
-	}
+	},
+//	watch: {
+//		tmpCap: function (val) {
+//	    	this.capitulo.numero = this.tmpCap;
+//		}
+//	}
 }
