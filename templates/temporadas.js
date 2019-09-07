@@ -16,30 +16,33 @@ const Temporadas = { template: '<div style="text-align:center">' +
 					'</v-list-tile-content>'+
 					'<v-list-tile-action>'+
 					
-					'<v-speed-dial v-model="fab[capitulo.numero]" style="right:0px!important;" :direction="\'left\'" :transition="\'slide-x-reverse-transition\'">' +
-					    '<template v-slot:activator >' +
-					      '<v-btn v-model="fab[capitulo.numero]" style="background-color:#DD3333;" dark fab small>' +
-					        '<v-icon>headset</v-icon>' +
-					        '<v-icon>close</v-icon>' +
-					      '</v-btn>' +
-					    '</template>' +
-					    
-					    '<v-btn class="fab-link-capitulo" v-if="capitulo.linkSpotify!=null" fab dark small style="background-color:#1dd15d!important" :href="capitulo.linkSpotify" target="_blank">' +
-							'<img src="imagenes/logo_spotify_sml.png"  />' + 
-						'</v-btn>' +
-						'<v-btn class="fab-link-capitulo" v-if="capitulo.linkIvoox!=null" fab color="orange" dark small :href="capitulo.linkIvoox" target="_blank">' + 
-						  	'<img src="imagenes/logo_ivoox_sml.png"/>' + 
-						'</v-btn>' +
-						'<v-btn class="fab-link-capitulo" v-if="capitulo.linkMixcloud!=null" fab color="black" dark small :href="capitulo.linkMixcloud" target="_blank">' + 
-							'<img src="imagenes/logo_mixcloud_sml.png"/>' + 
-						'</v-btn>' +
-						'<v-btn class="fab-link-capitulo" fab color="blue darken-4" dark small :href="capitulo.linkDescargar" target="_blank">' + 
-						  	'<v-icon color="white">file_download</v-icon>'+
-						'</v-btn>' +
-						'<v-btn class="fab-link-capitulo" fab color="red darken-1" dark small v-on:click="irACapitulo(capitulo)">' + 
-							'<img src="imagenes/logo_bso_btn_sml.png"/>' + 
-						'</v-btn>' +
-					'</v-speed-dial>' +
+						'<v-speed-dial v-model="fab[capitulo.numero]" style="right:0px!important;" :direction="\'left\'" :transition="\'slide-x-reverse-transition\'">' +
+						    '<template v-slot:activator >' +
+						      '<v-btn v-model="fab[capitulo.numero]" style="background-color:#DD3333;" dark fab small>' +
+						        '<v-icon>headset</v-icon>' +
+						        '<v-icon>close</v-icon>' +
+						      '</v-btn>' +
+						    '</template>' +
+						    
+						    '<v-btn class="fab-link-capitulo" v-if="capitulo.linkSpotify!=null" fab dark small style="background-color:#1dd15d!important" :href="capitulo.linkSpotify" target="_blank">' +
+								'<img src="imagenes/logo_spotify_sml.png"  />' + 
+							'</v-btn>' +
+							'<v-btn class="fab-link-capitulo" v-if="capitulo.linkIvoox!=null" fab color="orange" dark small :href="capitulo.linkIvoox" target="_blank">' + 
+							  	'<img src="imagenes/logo_ivoox_sml.png"/>' + 
+							'</v-btn>' +
+							'<v-btn class="fab-link-capitulo" v-if="capitulo.linkMixcloud!=null" fab color="black" dark small :href="capitulo.linkMixcloud" target="_blank">' + 
+								'<img src="imagenes/logo_mixcloud_sml.png"/>' + 
+							'</v-btn>' +
+							'<v-btn class="fab-link-capitulo" fab color="blue darken-4" dark small :href="capitulo.linkDescargar" target="_blank">' + 
+							  	'<v-icon color="white">file_download</v-icon>'+
+							'</v-btn>' +
+							'<v-btn class="fab-link-capitulo" fab color="red darken-1" dark small v-on:click="irACapitulo(capitulo)">' + 
+								'<img src="imagenes/logo_bso_btn_sml.png"/>' + 
+							'</v-btn>' +
+							'<v-btn class="fab-link-capitulo" fab color="blue" small dark :href="\'#/capitulo-editor/\' + capitulo.numero">'+
+						  	  '<v-icon color="white">edit</v-icon>'+
+						  	'</v-btn>'+
+						'</v-speed-dial>' +
 					  
 					'</v-list-tile-action>'+
 				'</v-list-tile>'+
