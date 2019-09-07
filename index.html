@@ -49,14 +49,45 @@
 				      		<img v-if="imagenGrande" src="imagenes/logo-bso.jpg" style="max-width: 100%" class="elevation-7 mx-auto"></img>
 				      		<img v-if="!imagenGrande" src="imagenes/logo-bso_sml.jpg" style="max-width: 100%" class="elevation-7 mx-auto"></img>
 					      						      
-							<v-tabs id="navBar" grow fixed-tabs router show-arrows dark color="teal lighten-2"  slider-color="teal darken-3">
+							<v-toolbar fixed style="background-color:#DD3333;border-color:#DD3333;" dark v-if="$vuetify.breakpoint.xs" class="main-toolbar">
+							    <v-toolbar-side-icon @click="menu=true;"></v-toolbar-side-icon>
+							    <v-toolbar-items style="width:100%">
+							      <v-img src="imagenes/logo-bso_sml.webp"></v-img>
+							    </v-toolbar-items>
+							</v-toolbar>
+							<v-tabs v-if="$vuetify.breakpoint.smAndUp" id="navBar" grow fixed-tabs router show-arrows dark color="teal lighten-2"  slider-color="teal darken-3">
 								<v-tab to="/" class="bar-button"><v-icon>home</v-icon></v-tab>
 								<v-tab to="/temporadas" class="bar-button">Temporadas</v-tab>
 								<v-tab to="/bso-escribe/1" class="bar-button">¡BSO escribe!</v-tab>
 								<v-tab to="/bso-escucha/1" class="bar-button">¡BSO escucha!</v-tab>
 								<v-tab to="/quienes-somos" class="bar-button">Quienes Somos</v-tab>
 								<v-tab to="/cuadernos">¡Cuadernos!</v-tab>
-							</v-tabs>
+							</v-tabs> 
+							<v-navigation-drawer dark style="background-color:#DD3333;border-color:#DD3333;" fixed temporary v-model="menu"> 
+								<v-list class="pa-1" >
+							        <v-list-tile avatar>
+<!-- 							          <v-list-tile-avatar> -->
+<!-- 							            <img src="https://randomuser.me/api/portraits/men/85.jpg"> -->
+<!-- 							          </v-list-tile-avatar> -->
+							
+							          <v-list-tile-content style="height:32px;">
+							            <v-list-tile-title style="height:32px;"><img height="32px" src="imagenes/bso.png"></img></v-list-tile-title>
+							          </v-list-tile-content>
+							        </v-list-tile>
+							    </v-list>
+						        <v-list class="pt-0" >
+							        <v-divider></v-divider>
+									<v-list-tile v-for="pag in paginas" :key="pag.titulo" :href="'#' + pag.ruta">
+										<v-list-tile-action>
+											<v-icon>{{pag.icono}}</v-icon>
+										</v-list-tile-action>
+										<v-list-tile-content>
+											<v-list-tile-title>{{pag.titulo}}</v-list-tile-title>
+										</v-list-tile-content>
+									</v-list-tile>
+								</v-list>
+							</v-navigation-drawer>
+							<div v-if="$vuetify.breakpoint.xs" style="height:60px;"></div> 
 							<transition name="fade" mode="out-in">
 								<router-view></router-view>
 							</transition>

@@ -1,3 +1,7 @@
+String.prototype.padLeft = function (paddingValue) {
+   return String(paddingValue + this).slice(-paddingValue.length);
+};
+
 function updateMinHeight(){
 	document.getElementById('main-panel').style.minHeight=(window.innerHeight+10) + "px";
 }
@@ -27,6 +31,22 @@ function unloadScrollBars() {
     document.documentElement.style.overflow = 'hidden';  // firefox, chrome
     document.body.scroll = "no"; // ie only
 }
+
+let navBar=document.getElementById("navBar");
+window.onscroll = function(){setStickyBar();}
+	
+function setStickyBar(){
+	if (sticky>0 && navBar!=null){
+		if (window.pageYOffset > sticky) {
+			navBar.classList.add("bar-sticky");
+		} else {
+			navBar.classList.remove("bar-sticky");
+		}
+	}
+}
+
+//Get the offset position of the navbar
+let sticky = navBar.offsetTop;
 
 const routes = [
   { path: '/', component: Inicio },
@@ -59,11 +79,26 @@ new Vue({
     data () {
 		  return { 
 		  		  imagenGrande:false,
-				  timer:null}
-	},
+				  timer:null,
+				  paginas: [
+					  { titulo:'Inicio',ruta:'/inicio/1',icono:'home'},
+					  { titulo:'Temporadas',ruta:'/temporadas',icono:'assignment'},
+					  { titulo:'¡BSO Escribe!',ruta:'/bso-escribe/1',icono:'create'},
+					  { titulo:'¡BSO Escucha!',ruta:'/bso-escucha/1',icono:'mic'},
+					  { titulo:'Quienes Somos',ruta:'/quienes-somos',icono:'face'},
+					  { titulo:'¡Cuadernos!',ruta:'/cuadernos',icono:'chrome_reader_mode'},
+				  ],
+				  menu:false
+	}},
 	mounted(){
 		updateMinHeight();
 		this.timer=setInterval(this.setImagenInicial,200);
+		if (Modernizr.webp==true){
+			this.$root.$webp='&webp=1';
+	    }
+		else{
+			this.$root.$webp='';
+		}
 	},
 	methods:{
 		setImagenInicial: function(){
@@ -72,7 +107,7 @@ new Vue({
 				clearInterval(this.timer);
 				this.mostrarImagenGrande();
 				let navBar=document.getElementById("navBar");
-				sticky=navBar.offsetTop;
+//				sticky=navBar.offsetTop;
 			}
 		},
 		mostrarImagenGrande: function(){

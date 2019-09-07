@@ -5,9 +5,9 @@ const Cuadernos = { template: '<div><v-card>'+
 	   '</v-card-text>' +
 					 '</v-card>' +
 					 '<v-card>' +
-					 '<v-container fluid grid-list-sm>' +
+					 '<v-container fluid grid-list-sm wrap>' +
 					 	'<v-layout row wrap>' +
-							'<v-flex v-for="(cuad,i) in cuadernos" :key="i" xs4>' +
+							'<v-flex v-for="(cuad,i) in cuadernos" :key="i" xs12 sm6 lg4>' +
 								'<v-card class="elevation-5" style="margin:5px">' +
 									'<v-img :src="basepath + \'imagenes/\' + cuad.imagenMin" height="200px" >' +
 										'<v-container fill-height fluid pa-0>' +
@@ -27,11 +27,12 @@ const Cuadernos = { template: '<div><v-card>'+
 								'</v-card>' +
 							'</v-flex>' +
 						'</v-layout>' +
+						'<cuaderno-zoom :cuadernos="cuadernos" :show="zoom" :idx="imagenZoomIdx"></cuaderno-zoom>' +
 					 '</v-container>' +
 					 '</v-card>' +
 					 '</div>' ,
 data () {
-	return { cuadernos:[],basepath:'../bso-radio/'}
+	return { cuadernos:[],basepath:'../bso-radio/',zoom:false,imagenZoomIdx:null}
 },
 created() {
 	  Vue.http.get("api/cuadernos.php").then(result => {
@@ -41,4 +42,19 @@ created() {
 	      }, error => {
 	          console.error(error);
 	      });
-}}
+	      this.$root.$on('zoom:off',this.cerrarZoom);
+},
+		methods: {
+			getImageUrl: function(cuaderno){
+				return 'api/thumbnail.php?ty=cu&i=' + encodeURIComponent(cuaderno.imagen) + this.$root.$webp;
+			},
+			cerrarZoom:function (index){
+				this.zoom=false;
+				this.imagenZoomIdx=null;
+			},
+			hacerZoom:function (index){
+				this.zoom=true;
+				this.imagenZoomIdx=index;
+			}
+		}
+}

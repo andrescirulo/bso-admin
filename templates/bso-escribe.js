@@ -32,7 +32,7 @@ const BsoEscribe = { template: '<div>'+
 							  '<div class="escrito-resenia-autor">Por {{tex.autor}}</div>' + 
 							'</div>' + 
 							'<v-card-actions>' + 
-								'<v-btn small color="cyan" dark :href="\'#/texto/\' + tex.id">Leer Más</v-btn>' + 
+								'<v-btn small color="teal lighten-1" dark :href="\'#/texto/\' + tex.id">Leer Más</v-btn>' + 
 								'<v-btn icon ripple color="blue" dark :href="\'#/texto-editor/\' + tex.id">'+
 											'<v-icon color="white">edit</v-icon>'+
 								'</v-btn>'+
@@ -44,7 +44,7 @@ const BsoEscribe = { template: '<div>'+
 						'</v-layout>' + 
 				      '</v-container>' + 
 					 '</v-card>' +
-					 '<v-layout row wrap>' +
+					 '<v-layout row wrap v-if="textos.length>0">' +
 						  '<v-flex>' +
 						  	'<v-pagination v-model="pagina" :length="totalPaginas" ></v-pagination>' +
 						  '</v-flex>' + 
@@ -89,6 +89,7 @@ const BsoEscribe = { template: '<div>'+
 	},
 	watch:{
 		pagina: function(val){
+			scrollToTop();
 			this.getPagina();
 		}
 	}

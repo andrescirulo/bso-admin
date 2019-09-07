@@ -7,6 +7,7 @@ class Capitulo
     public $linkDescargar;
     public $linkIvoox;
     public $linkMixcloud;
+    public $linkSpotify;
     public $fecha;
     public $texto;
     public $imagen;

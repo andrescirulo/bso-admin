@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (isset($_GET["t"])){
         $capitulos = array();
         
-        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_link_descargar,capi_temporada_desc FROM capitulos WHERE capi_temporada=?" . $publico;
+        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_link_descargar,capi_temporada_desc,capi_link_ivoox,capi_link_mixcloud,capi_link_spotify FROM capitulos WHERE capi_temporada=?" . $publico;
         $st = $dbh->prepare($query);
         $st->bindParam(1,$_GET["t"]);
         $st->execute();
@@ -23,9 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $capitulo = new Capitulo();
             $capitulo->temporada = $resData["capi_temporada"];
             $capitulo->temporadaDescripcion = $resData["capi_temporada_desc"];
-            $capitulo->numero = $resData["capi_numero"];
+            $capitulo->numero = $capitulo->temporada>0?$resData["capi_numero"]:($resData["capi_numero"]*-1);
             $capitulo->nombre = $resData["capi_nombre"];
             $capitulo->linkDescargar = $resData["capi_link_descargar"];
+            $capitulo->linkIvoox = $resData["capi_link_ivoox"];
+            $capitulo->linkMixcloud = $resData["capi_link_mixcloud"];
+            $capitulo->linkSpotify = $resData["capi_link_spotify"];
             $capitulos[] = $capitulo;
         }
         

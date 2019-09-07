@@ -30,7 +30,12 @@ Vue.component('cuaderno-zoom',{
 		},
 		getImagenZoom(){
 			if (this.imagenZoomIdx==null){return;}
-			return 'imagenes/' + this.cuadernos[this.imagenZoomIdx].imagen;
+			let img = 'imagenes/' + this.cuadernos[this.imagenZoomIdx].imagen;
+				
+			if (Modernizr.webp==true){
+				img = img.replace('.jpg','.webp');
+			}
+			return img;
 		},
 		siguienteImagen(){
 			this.imagenZoomIdx++;

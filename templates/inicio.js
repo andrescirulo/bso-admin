@@ -4,7 +4,7 @@ const Inicio = { template: '<div>'+
 			'<div v-if="posts.length==0" style="width:100%;text-align:center">'+
 				'<v-progress-circular mx-auto :size="70" :width="7" indeterminate color="green" ></v-progress-circular>'+
 			'</div>'+
-			'<v-card v-if="posts.length>=0" v-for="(post,i) in posts" :key="i" style="margin-bottom:10px">' + 
+			'<v-card v-if="posts.length>0" v-for="(post,i) in posts" :key="i" style="margin-bottom:10px">' + 
 				'<v-container fluid grid-list-lg>' + 
 				'<v-layout row wrap>' + 
 				  '<v-flex xs12 sm5>' + 
@@ -36,13 +36,13 @@ const Inicio = { template: '<div>'+
 				'</v-layout>' + 
 		      '</v-container>' + 
 		  '</v-card>' +
-		  '<v-layout row wrap>' +
+		  '<v-layout row wrap v-if="posts.length>0">' +
 			  '<v-flex>' +
 			  	'<v-pagination v-model="pagina" :length="totalPaginas" ></v-pagination>' +
 			  '</v-flex>' + 
 		  '</v-layout>' + 
 	  '</v-flex>' + 
-	  '<v-flex class="hidden-sm-and-down" md3>' +
+	  '<v-flex class="hidden-sm-and-down" md3 v-if="$vuetify.breakpoint.mdAndUp">' +
 	  	'<v-card class="inicio-panel-derecha" color="teal">' +
 		'</v-card>' + 
 	  '</v-flex>' +
@@ -140,6 +140,7 @@ const Inicio = { template: '<div>'+
 	},
 	watch:{
 		pagina: function(val){
+			scrollToTop();
 			this.getPagina();
 		}
 	}

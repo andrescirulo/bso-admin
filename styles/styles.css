@@ -93,6 +93,7 @@
 .capitulo-panel-derecha {
 	height: 95% !important;
 	margin: 5px;
+    padding-bottom: 30px!important;
 }
 
 .bso-carousel {
@@ -272,6 +273,28 @@
 	display: block;
 	max-height: 100vh;
 	max-width: 100vw;
+}
+.video-style{
+	display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+    height: auto;
+}
+
+.main-toolbar > .v-toolbar__content{
+	padding-right:0px!important;
+}
+.btn-link-capitulo{
+	margin-bottom: 8px!important;
+	margin-left: 8px!important;
+    margin-right: 8px!important;
+}
+.btn-small{
+	min-width: 40px!important;
+}
+.fab-link-capitulo{
+	margin-right:10px!important;
+	border-radius:2px!important;
 }
 
 .tag-parent{
