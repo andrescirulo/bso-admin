@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo json_encode($capitulos);
     }
     elseif (isset($_GET["c"])){
-        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_titulo,capi_link_descargar,capi_link_ivoox,capi_link_mixcloud,capi_fecha,capi_texto,IFNULL(capi_imagen,'default_capitulo.jpg') capi_imagen,capi_publico FROM capitulos WHERE capi_numero=?" . $publico;
+        $query = "SELECT capi_temporada,capi_numero, capi_nombre,capi_titulo,capi_link_spotify,capi_link_descargar,capi_link_ivoox,capi_link_mixcloud,capi_fecha,capi_texto,IFNULL(capi_imagen,'default_capitulo.jpg') capi_imagen,capi_publico FROM capitulos WHERE capi_numero=?" . $publico;
         $st = $dbh->prepare($query);
         $st->bindParam(1,$_GET["c"]);
         $st->execute();
@@ -46,6 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $capitulo->linkDescargar = $resData["capi_link_descargar"];
         $capitulo->linkIvoox = $resData["capi_link_ivoox"];
         $capitulo->linkMixcloud = $resData["capi_link_mixcloud"];
+        $capitulo->linkSpotify = $resData["capi_link_spotify"];
         $capitulo->texto = $resData["capi_texto"];
         $capitulo->imagen = $resData["capi_imagen"];
         $capitulo->publico = $resData["capi_publico"];
@@ -138,7 +139,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     else{
         if ($capitulo->editando){
-            $update = "UPDATE capitulos SET capi_temporada=?, capi_nombre=?, capi_titulo=?, capi_link_descargar=?, capi_fecha=?, capi_texto=?, capi_link_ivoox=?, capi_link_mixcloud=? WHERE capi_numero=?";
+            $update = "UPDATE capitulos SET capi_temporada=?, capi_nombre=?, capi_titulo=?, capi_link_descargar=?, capi_fecha=?, capi_texto=?, capi_link_ivoox=?, capi_link_mixcloud=?,capi_link_spotify=? WHERE capi_numero=?";
             $st = $dbh->prepare($update);
             $st->bindParam(1,$capitulo->temporada);
             $st->bindParam(2,$capitulo->nombre);
@@ -148,7 +149,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(6,$capitulo->texto);
             $st->bindParam(7,$capitulo->linkIvoox);
             $st->bindParam(8,$capitulo->linkMixcloud);
-            $st->bindParam(9,$capitulo->numero);
+            $st->bindParam(9,$capitulo->linkSpotify);
+            $st->bindParam(10,$capitulo->numero);
             $st->execute();
         }
         else{
@@ -159,8 +161,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $tempDesc= 'Temporada ' . $capitulo->temporada;
             }
             
-            $insert = "INSERT INTO capitulos (capi_temporada, capi_numero, capi_nombre, capi_titulo, capi_link_descargar, capi_fecha, capi_texto, capi_link_ivoox, capi_link_mixcloud,capi_temporada_desc)";
-            $insert = $insert . " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+            $insert = "INSERT INTO capitulos (capi_temporada, capi_numero, capi_nombre, capi_titulo, capi_link_descargar, capi_fecha, capi_texto, capi_link_ivoox, capi_link_mixcloud, capi_link_spotify, capi_temporada_desc)";
+            $insert = $insert . " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $st = $dbh->prepare($insert);
             $st->bindParam(1,$capitulo->temporada);
             $st->bindParam(2,$capitulo->numero);
@@ -171,7 +173,8 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $st->bindParam(7,$capitulo->texto);
             $st->bindParam(8,$capitulo->linkIvoox);
             $st->bindParam(9,$capitulo->linkMixcloud);
-            $st->bindParam(10,$tempDesc);
+            $st->bindParam(10,$capitulo->linkSpotify);
+            $st->bindParam(11,$tempDesc);
             $ok=$st->execute();
             if ($ok === true){
                 error_log("\nOK capitulo",3,'errors.log');

@@ -30,6 +30,7 @@ const CapituloEditor = { template: '<div>'+
 							'<v-btn flat color="primary" @click="$refs.dialog.save(capitulo.fecha)">OK</v-btn>' +
 						'</v-date-picker>' +
 					'</v-dialog>' +
+					'<v-text-field v-model="capitulo.linkSpotify" :counter="300" label="Link de Spotify" required></v-text-field>' +
 					'<v-text-field v-model="capitulo.linkDescargar" :counter="300" label="Link para Descargar" required></v-text-field>' +
 					'<v-text-field v-model="capitulo.linkIvoox" :counter="300" label="Link de Ivoox" required></v-text-field>' +
 					'<v-text-field style="margin-bottom:20px" v-model="capitulo.linkMixcloud" :counter="300" label="Link de Mixcloud" required hint="Link del capitulo. Ej: https://www.mixcloud.com/bsoradio/spinoff-04-captain-marvel-2019/" persistent-hint></v-text-field>' +
@@ -144,6 +145,10 @@ const CapituloEditor = { template: '<div>'+
 				scrollToTop();
 				return;
 			}
+			this.capitulo.linkSpotify=this.normalizarVacio(this.capitulo.linkSpotify);
+			this.capitulo.linkIvoox=this.normalizarVacio(this.capitulo.linkIvoox);
+			this.capitulo.linkMixcloud=this.normalizarVacio(this.capitulo.linkMixcloud);
+			this.capitulo.linkDescargar=this.normalizarVacio(this.capitulo.linkDescargar);
 			Vue.http.post("api/capitulos.php",this.capitulo).then(result => {
 					result.json().then(capitulo =>{
 						this.capitulo = capitulo;
@@ -152,6 +157,11 @@ const CapituloEditor = { template: '<div>'+
 			}, error => {
 					console.error(error);
 			});
+		 },
+		 normalizarVacio(link){
+			if (link==null){return null;};
+			if (link.trim().length==0){return null;};
+			return link;
 		 },
 		 onPublicar(){
 			let op = new Object();
