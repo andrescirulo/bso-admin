@@ -83,10 +83,10 @@ new Vue({
 				  paginas: [
 					  { titulo:'Inicio',ruta:'/inicio/1',icono:'home'},
 					  { titulo:'Temporadas',ruta:'/temporadas',icono:'assignment'},
-					  { titulo:'¡BSO Escribe!',ruta:'/bso-escribe/1',icono:'create'},
-					  { titulo:'¡BSO Escucha!',ruta:'/bso-escucha/1',icono:'mic'},
+					  { titulo:'Â¡BSO Escribe!',ruta:'/bso-escribe/1',icono:'create'},
+					  { titulo:'Â¡BSO Escucha!',ruta:'/bso-escucha/1',icono:'mic'},
 					  { titulo:'Quienes Somos',ruta:'/quienes-somos',icono:'face'},
-					  { titulo:'¡Cuadernos!',ruta:'/cuadernos',icono:'chrome_reader_mode'},
+					  { titulo:'Â¡Cuadernos!',ruta:'/cuadernos',icono:'chrome_reader_mode'},
 				  ],
 				  menu:false
 	}},
