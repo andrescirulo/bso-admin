@@ -3,10 +3,11 @@ $fileName = $_FILES['file']['name'];
 $fileType = $_FILES['file']['type'];
 $fileError = $_FILES['file']['error'];
 
+require_once('config.php');
 session_save_path('sessions');
 session_start();
 $res = array();
-$basepath="../bso-radio/";
+$basepath="../" . $MAIN_DIR . "/";
 if($fileError == UPLOAD_ERR_OK){
     //$fileContent = file_get_contents($_FILES['file']['tmp_name']);
     $imgType = exif_imagetype($_FILES["file"]["tmp_name"]);

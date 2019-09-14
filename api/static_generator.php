@@ -1,9 +1,9 @@
 <?php
 
 function getStaticBaseDir(){
-    $baseAdmin = 'bso-admin' . DIRECTORY_SEPARATOR . 'api';
-    $basePage = 'bso-radio';
-    return str_replace( DIRECTORY_SEPARATOR . $baseAdmin, DIRECTORY_SEPARATOR  . $basePage,getcwd()) . DIRECTORY_SEPARATOR . "static/";
+    require_once('config.php');
+    $baseAdmin = $ADMIN_DIR . DIRECTORY_SEPARATOR . 'api';
+    return str_replace( DIRECTORY_SEPARATOR . $baseAdmin, DIRECTORY_SEPARATOR  . $MAIN_DIR,getcwd()) . DIRECTORY_SEPARATOR . "static/";
 }
 
 function generarStatic($archivo,$titulo,$imagen,$descripcion,$url,$urlRedir){

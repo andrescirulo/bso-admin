@@ -3,14 +3,8 @@ require_once 'domain/texto.php';
 require_once 'connect.php';
 
 header('Content-Type: application/json');
-/*--DESARROLLO--*/
-$BSO_RADIO_CLI_DIR="../bso-radio/";
-$BSO_RADIO_DIR="../../bso-radio/";
 
-/*--PRODUCCCION--
-$BSO_RADIO_CLI_DIR="https://www.bsoradio.com.ar/";
-$BSO_RADIO_DIR="../../public_html/";
-*/
+require_once('config.php');
 
 session_save_path('sessions');
 session_start();
