@@ -39,7 +39,7 @@ const Temporadas = { template: '<div style="text-align:center">' +
 							'<v-btn class="fab-link-capitulo" fab color="red darken-1" dark small v-on:click="irACapitulo(capitulo)">' + 
 								'<img src="imagenes/logo_bso_btn_sml.png"/>' + 
 							'</v-btn>' +
-							'<v-btn class="fab-link-capitulo" fab color="blue" small dark :href="\'#/capitulo-editor/\' + capitulo.numero">'+
+							'<v-btn class="fab-link-capitulo" fab color="blue" small dark :href="\'#/capitulo-editor/\' + getNumeroCapitulo(capitulo)">'+
 						  	  '<v-icon color="white">edit</v-icon>'+
 						  	'</v-btn>'+
 						'</v-speed-dial>' +
@@ -66,7 +66,11 @@ const Temporadas = { template: '<div style="text-align:center">' +
 	 },
 	 methods: {
 		 irACapitulo:function(capitulo){
-			this.$router.push('/capitulo/' + capitulo.numero) ;
+			this.$router.push('/capitulo/' + this.getNumeroCapitulo(capitulo)) ;
+		 },
+		 getNumeroCapitulo(capitulo){
+			//SI ES SPINOFF, PONGO NEGATIVO
+			return (capitulo.temporada==0)?capitulo.numero*-1:capitulo.numero;
 		 },
 		 onOpenOrClose(temporada){
 			 if (temporada.capitulos!=null){return;}
